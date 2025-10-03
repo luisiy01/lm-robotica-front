@@ -1,32 +1,36 @@
-import { useState } from "react"
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, type SelectChangeEvent } from "@mui/material"
+import { useState } from "react";
+import {
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+  type SelectChangeEvent,
+} from "@mui/material";
 
 const dias: string[] = [
-  'Lunes',
-  'Martes',
-  'Miercoles',
-  'Jueves',
-  'Viernes',
-  'Sabado'
-]
+  "Lunes",
+  "Martes",
+  "Miercoles",
+  "Jueves",
+  "Viernes",
+  "Sabado",
+];
 
-const horas: string[] = [
-  '15:00',
-  '17:00',
-  '19:00',
-]
+const horas: string[] = ["15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"];
 
 const marginGridItem = {
-  marginBottom: 24
-}
+  marginBottom: 8,
+};
 
 export const Registro = () => {
-
-  const [dia1, setDia1] = useState('')
-  const [dia2, setDia2] = useState('')
-  const [hora1, setHora1] = useState('')
-  const [hora2, setHora2] = useState('')
-
+  const [dia1, setDia1] = useState("");
+  const [dia2, setDia2] = useState("");
+  const [hora1, setHora1] = useState("");
+  const [hora2, setHora2] = useState("");
 
   const handleDia1Change = (event: SelectChangeEvent) => {
     setDia1(event.target.value as string);
@@ -44,98 +48,132 @@ export const Registro = () => {
     setHora2(event.target.value as string);
   };
 
-
   return (
-    <Grid container spacing={2} >
-      <Grid size={12} style={marginGridItem} >
-        <TextField fullWidth id="outlined-basic" label="Nombre" variant="outlined" />
+    <Grid container spacing={2}>
+      <Grid size={12} style={marginGridItem}>
+        <TextField
+          fullWidth
+          id="nombre"
+          label="Nombre completo del alumno"
+          variant="outlined"
+        />
       </Grid>
 
+      <Grid size={12}>
+        <Typography variant="h6" component="h6">
+          Horario 1
+        </Typography>
+      </Grid>
 
       <Grid size={6} style={marginGridItem}>
-        <FormControl fullWidth >
-          <InputLabel id="demo-simple-select-label">Dia</InputLabel>
+        <FormControl fullWidth>
+          <InputLabel id="dia1-label">Dia</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="dia1-label"
+            id="dia1"
             value={dia1}
             label="Age"
             onChange={handleDia1Change}
           >
-            {
-              dias.map(dia => (
-                <MenuItem value={dia}>{dia}</MenuItem>
-              ))
-            }
+            {dias.map((dia) => (
+              <MenuItem value={dia}>{dia}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Grid>
 
       <Grid size={6} style={marginGridItem}>
-        <FormControl fullWidth >
-          <InputLabel id="demo-simple-select-label">Hora</InputLabel>
+        <FormControl fullWidth>
+          <InputLabel id="hora1-label">Hora</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="hora1-label"
+            id="hora1"
             value={hora1}
             label="Age"
             onChange={handleHora1Change}
           >
-            {
-              horas.map(hora => (
-                <MenuItem value={hora}>{hora}</MenuItem>
-              ))
-            }
+            {horas.map((hora) => (
+              <MenuItem value={hora}>{hora}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Grid>
 
-
+      <Grid size={12}>
+        <Typography variant="h6" component="h6">
+          Horario 2
+        </Typography>
+      </Grid>
 
       <Grid size={6} style={marginGridItem}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Dia</InputLabel>
+          <InputLabel id="dia2-label">Dia</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="dia2-label"
+            id="dia2"
             value={dia2}
             label="Age"
             onChange={handleDia2Change}
           >
-            {
-              dias.map(dia => (
-                <MenuItem value={dia}>{dia}</MenuItem>
-              ))
-            }
+            {dias.map((dia) => (
+              <MenuItem value={dia}>{dia}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Grid>
 
       <Grid size={6} style={marginGridItem}>
-        <FormControl fullWidth >
-          <InputLabel id="demo-simple-select-label">Hora</InputLabel>
+        <FormControl fullWidth>
+          <InputLabel id="hora2-label">Hora</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId="hora2-label"
+            id="hora2"
             value={hora2}
             label="Age"
             onChange={handleHora2Change}
           >
-            {
-              horas.map(hora => (
-                <MenuItem value={hora}>{hora}</MenuItem>
-              ))
-            }
+            {horas.map((hora) => (
+              <MenuItem value={hora}>{hora}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Grid>
 
+      <Grid size={6} style={marginGridItem}>
+        <TextField
+          fullWidth
+          id="diaCobro"
+          type="number"
+          label="Dia de cobro"
+          variant="outlined"
+          helperText="(1-31)"
+        />
+      </Grid>
+
+      <Grid size={6} style={marginGridItem}>
+        <TextField
+          fullWidth
+          id="costo"
+          type="number"
+          label="Costo Mensual"
+          variant="outlined"
+        />
+      </Grid>
+
       <Grid size={12} style={marginGridItem}>
-        <TextField fullWidth id="outlined-basic" label="# Contacto" variant="outlined" />
+        <TextField
+          fullWidth
+          type="number"
+          id="contacto"
+          label="# Contacto"
+          variant="outlined"
+        />
       </Grid>
 
       <Grid size={2}>
-        <Button style={{ backgroundColor: 'green' }} variant="contained">Agregar</Button>
+        <Button style={{ backgroundColor: "green" }} variant="contained">
+          Agregar
+        </Button>
       </Grid>
 
       <Grid size={2}>
@@ -143,13 +181,10 @@ export const Registro = () => {
       </Grid>
 
       <Grid size={2}>
-        <Button style={{ backgroundColor: 'red' }} variant="contained">Eliminar</Button>
+        <Button style={{ backgroundColor: "red" }} variant="contained">
+          Eliminar
+        </Button>
       </Grid>
-
-
-
-
     </Grid>
-
-  )
-}
+  );
+};
