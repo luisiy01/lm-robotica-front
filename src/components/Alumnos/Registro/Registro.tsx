@@ -8,8 +8,11 @@ import {
   Select,
   TextField,
   Typography,
+  IconButton,
   type SelectChangeEvent,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useStore } from "../../../store/useStore";
 
 const dias: string[] = [
   "Lunes",
@@ -27,6 +30,8 @@ const marginGridItem = {
 };
 
 export const Registro = () => {
+  const { alumno, disSelectAlumno } = useStore();
+
   const [dia1, setDia1] = useState("");
   const [dia2, setDia2] = useState("");
   const [hora1, setHora1] = useState("");
@@ -50,12 +55,18 @@ export const Registro = () => {
 
   return (
     <Grid container spacing={2}>
+      <Grid>
+        <IconButton onClick={() => disSelectAlumno()}>
+          <ArrowBackIcon />
+        </IconButton>
+      </Grid>
       <Grid size={12} style={marginGridItem}>
         <TextField
           fullWidth
           id="nombre"
           label="Nombre completo del alumno"
           variant="outlined"
+          value={alumno?.nombre}
         />
       </Grid>
 
@@ -170,21 +181,25 @@ export const Registro = () => {
         />
       </Grid>
 
-      <Grid size={2}>
-        <Button style={{ backgroundColor: "green" }} variant="contained">
-          Agregar
-        </Button>
-      </Grid>
+      {!alumno?.id ? (
+        <Grid size={2}>
+          <Button style={{ backgroundColor: "green" }} variant="contained">
+            Agregar
+          </Button>
+        </Grid>
+      ) : (
+        <>
+          <Grid size={2}>
+            <Button variant="contained">Modificar</Button>
+          </Grid>
 
-      <Grid size={2}>
-        <Button variant="contained">Modificar</Button>
-      </Grid>
-
-      <Grid size={2}>
-        <Button style={{ backgroundColor: "red" }} variant="contained">
-          Eliminar
-        </Button>
-      </Grid>
+          <Grid size={2}>
+            <Button style={{ backgroundColor: "red" }} variant="contained">
+              Eliminar
+            </Button>
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 };

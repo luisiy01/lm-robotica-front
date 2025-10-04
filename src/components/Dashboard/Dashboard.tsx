@@ -15,26 +15,28 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useState } from "react";
-import { Registro } from "../Registro/Registro";
 import { Asistencia } from "../Asistencia/Asistencia";
 import { Pagos } from "../Pagos/Pagos";
 import { Drawer } from "./Drawer";
 import { AppBar } from "./AppBar";
 import { DrawerHeader } from "./DrawerHeader";
 import logo from "../../assets/lmrobotica.jpg";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Alumnos } from "../Alumnos/Alumnos";
+import { useStore } from "../../store/useStore";
 
 const menuOptions: string[] = [
   "Control de Asistencia",
   "Control de Pago",
-  "Registro de Alumno",
+  "Alumnos",
 ];
 
 export const Dashboard = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [drawerItemSelected, setDrawerItemSelected] = useState(0);
+  const { disSelectAlumno } = useStore();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -42,6 +44,11 @@ export const Dashboard = () => {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const onClickOption = (index: number) => {
+    setDrawerItemSelected(index);
+    disSelectAlumno();
   };
 
   return (
@@ -97,7 +104,7 @@ export const Dashboard = () => {
                         justifyContent: "center",
                       },
                 ]}
-                onClick={() => setDrawerItemSelected(index)}
+                onClick={() => onClickOption(index)}
               >
                 <ListItemIcon
                   sx={[
@@ -121,7 +128,7 @@ export const Dashboard = () => {
                       case 1:
                         return <AttachMoneyIcon />;
                       case 2:
-                        return <PersonAddIcon />;
+                        return <AccountCircleIcon />;
                       default:
                         return null;
                     }
@@ -148,7 +155,7 @@ export const Dashboard = () => {
         <DrawerHeader />
         {drawerItemSelected === 0 && <Asistencia />}
         {drawerItemSelected === 1 && <Pagos />}
-        {drawerItemSelected === 2 && <Registro />}
+        {drawerItemSelected === 2 && <Alumnos />}
       </Box>
     </Box>
   );
