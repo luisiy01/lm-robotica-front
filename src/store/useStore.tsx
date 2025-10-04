@@ -12,7 +12,7 @@ type State = {
   newAlumno: () => void;
 };
 
-export const useStore = create<State>()((set, get) => ({
+export const useStore = create<State>()((set, _get) => ({
   //implementacion
   alumno: null,
   //getters

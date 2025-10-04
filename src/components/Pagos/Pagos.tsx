@@ -70,7 +70,15 @@ export const Pagos = () => {
   ];
 
   const [open, setOpen] = useState(false);
-  const [alumno, setAlumno] = useState(null);
+  type Alumno = {
+    id: number;
+    nombre: string;
+    costo: number;
+    diaCobro: number;
+    statusPago: boolean;
+  };
+
+  const [alumno, setAlumno] = useState<Alumno | null>(null);
 
   const handleOpen = (rowSelected: any) => {
     setAlumno(rowSelected);
