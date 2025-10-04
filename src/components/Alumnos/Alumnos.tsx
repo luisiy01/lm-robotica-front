@@ -26,6 +26,8 @@ export const Alumnos = () => {
       field: "accion",
       headerName: "Accion",
       width: 190,
+      sortable: false,
+      filterable: false,
       renderCell: (_params) => {
         return (
           <Button variant="contained" onClick={() => selectAlumno(_params.row)}>
@@ -53,9 +55,17 @@ export const Alumnos = () => {
             <DataGrid
               rows={rows}
               columns={columns}
-              initialState={{ pagination: { paginationModel } }}
+              initialState={{
+                pagination: { paginationModel },
+                columns: {
+                  columnVisibilityModel: {
+                    id: false,
+                  },
+                },
+              }}
               pageSizeOptions={[5, 10]}
               sx={{ border: 0 }}
+              disableRowSelectionOnClick
             />
           </Grid>
         </Grid>
