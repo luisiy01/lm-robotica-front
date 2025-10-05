@@ -45,16 +45,13 @@ export const Asistencia = () => {
       field: "semana1",
       headerName: "Semana 1",
       width: 250,
-      renderCell: (params) => {
+      renderCell: (_params) => {
         const [formats, setFormats] = useState<string[]>(() => []);
-
-        console.log("params", params.row);
 
         const handleFormat = (
           _event: React.MouseEvent<HTMLElement>,
           newFormats: string[]
         ) => {
-          console.log("newFormats", newFormats);
           setFormats(newFormats);
         };
 
@@ -86,16 +83,13 @@ export const Asistencia = () => {
       field: "semana2",
       headerName: "Semana 2",
       width: 250,
-      renderCell: (params) => {
+      renderCell: (_params) => {
         const [formats, setFormats] = useState<string[]>(() => []);
-
-        console.log("params", params.row);
 
         const handleFormat = (
           _event: React.MouseEvent<HTMLElement>,
           newFormats: string[]
         ) => {
-          console.log("newFormats", newFormats);
           setFormats(newFormats);
         };
 
@@ -127,16 +121,13 @@ export const Asistencia = () => {
       field: "semana3",
       headerName: "Semana 3",
       width: 250,
-      renderCell: (params) => {
+      renderCell: (_params) => {
         const [formats, setFormats] = useState<string[]>(() => []);
-
-        console.log("params", params.row);
 
         const handleFormat = (
           _event: React.MouseEvent<HTMLElement>,
           newFormats: string[]
         ) => {
-          console.log("newFormats", newFormats);
           setFormats(newFormats);
         };
 
@@ -168,16 +159,13 @@ export const Asistencia = () => {
       field: "semana4",
       headerName: "Semana 4",
       width: 250,
-      renderCell: (params) => {
+      renderCell: (_params) => {
         const [formats, setFormats] = useState<string[]>(() => []);
-
-        console.log("params", params.row);
 
         const handleFormat = (
           _event: React.MouseEvent<HTMLElement>,
           newFormats: string[]
         ) => {
-          console.log("newFormats", newFormats);
           setFormats(newFormats);
         };
 
@@ -266,7 +254,6 @@ export const Asistencia = () => {
           sx={{ border: 0 }}
         />
       </Grid>
-    
     </Grid>
   );
 };

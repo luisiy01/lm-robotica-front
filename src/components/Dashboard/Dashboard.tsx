@@ -1,21 +1,21 @@
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+import {
+  Box,
+  Toolbar,
+  List,
+  CssBaseline,
+  Typography,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import { useState } from "react";
 import { Asistencia } from "../Asistencia/Asistencia";
 import { Pagos } from "../Pagos/Pagos";
 import { Drawer } from "./Drawer";
@@ -24,32 +24,18 @@ import { DrawerHeader } from "./DrawerHeader";
 import logo from "../../assets/lmrobotica.jpg";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Alumnos } from "../Alumnos/Alumnos";
-import { useStore } from "../../store/useStore";
-
-const menuOptions: string[] = [
-  "Control de Asistencia",
-  "Control de Pago",
-  "Alumnos",
-];
+import { menuOptions } from "../../lib/Constants";
+import { useDashboard } from "./hooks/useDashboard";
 
 export const Dashboard = () => {
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const [drawerItemSelected, setDrawerItemSelected] = useState(0);
-  const { disSelectAlumno } = useStore();
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  const onClickOption = (index: number) => {
-    setDrawerItemSelected(index);
-    disSelectAlumno();
-  };
+  const {
+    open,
+    handleDrawerOpen,
+    drawerItemSelected,
+    handleDrawerClose,
+    theme,
+    onClickOption,
+  } = useDashboard();
 
   return (
     <Box sx={{ display: "flex" }}>

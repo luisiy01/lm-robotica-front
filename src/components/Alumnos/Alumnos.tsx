@@ -1,12 +1,11 @@
-import { DataGrid } from "@mui/x-data-grid";
-import type { GridColDef } from "@mui/x-data-grid";
+import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { Button, Grid } from "@mui/material";
 import { Registro } from "./Registro/Registro";
 import { useStore } from "../../store/useStore";
 
-function createData(id: number, nombre: string, accion: boolean) {
+const createData = (id: number, nombre: string, accion: boolean) => {
   return { id, nombre, accion };
-}
+};
 
 const rows = [
   createData(1, "Bruno Gael Barajas Sanches", true),
