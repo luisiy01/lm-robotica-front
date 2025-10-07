@@ -2,25 +2,17 @@ import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { Button, Grid } from "@mui/material";
 import { Registro } from "./Registro/Registro";
 import { useStore } from "../../store/useStore";
-
-const createData = (id: number, nombre: string, accion: boolean) => {
-  return { id, nombre, accion };
-};
-
-const rows = [
-  createData(1, "Bruno Gael Barajas Sanches", true),
-  createData(2, "Eder Rodriguez Rodriguez", false),
-  createData(3, "Bastian Kaleb Gaitan Ayala", true),
-];
+import { useAlumnos } from "./hooks/useAlumnos";
 
 const paginationModel = { page: 0, pageSize: 5 };
 
 export const Alumnos = () => {
   const { alumno, selectAlumno, newAlumno } = useStore();
+  const { rowsAlumnos } = useAlumnos();
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "nombre", headerName: "Nombre", width: 250 },
+    { field: "_id", headerName: "ID", width: 70 },
+    { field: "name", headerName: "Nombre", width: 250 },
     {
       field: "accion",
       headerName: "Accion",
@@ -52,13 +44,14 @@ export const Alumnos = () => {
           </Grid>
           <Grid size={12}>
             <DataGrid
-              rows={rows}
+              rows={rowsAlumnos}
+              getRowId={(row) => row._id}
               columns={columns}
               initialState={{
                 pagination: { paginationModel },
                 columns: {
                   columnVisibilityModel: {
-                    id: false,
+                    _id: false,
                   },
                 },
               }}
