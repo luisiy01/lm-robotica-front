@@ -26,13 +26,14 @@ export const useStore = create<State>()((set, _get) => ({
   },
   newAlumno: () => {
     const newAlumno: Alumno = {
-      id: null,
-      nombre: "",
-      horario1: "",
-      horario2: "",
+      _id: null,
+      name: "",
+      fecha1: "",
+      fecha2: "",
       diaCobro: 1,
       costoMensual: 0,
       contacto: "",
+      createdOn: 0,
     };
     set({ alumno: newAlumno });
   },

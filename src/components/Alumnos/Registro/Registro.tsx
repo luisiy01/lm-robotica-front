@@ -17,6 +17,7 @@ import { diasHabiles, horasHbiles } from "../../../lib/Constants";
 import { validationSchema } from "./Validations";
 import Snackbar, { type SnackbarCloseReason } from "@mui/material/Snackbar";
 import { useState } from "react";
+import { useRegistro } from "./hooks/useRegistro";
 
 const marginGridItem = {
   marginBottom: 8,
@@ -24,13 +25,14 @@ const marginGridItem = {
 
 export const Registro = () => {
   const { alumno, disSelectAlumno } = useStore();
+  const { agregarAlumno } = useRegistro();
 
   const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
     useFormik({
       initialValues: {
-        nombre: alumno?.nombre || "",
+        name: alumno?.name || "",
         diaCobro: "",
-        costo: "",
+        costoMensual: "",
         contacto: "",
         dia1: "",
         hora1: "",
@@ -39,7 +41,9 @@ export const Registro = () => {
       },
       validationSchema: validationSchema,
       onSubmit: (values) => {
-        alert(JSON.stringify(values, null, 2));
+        if (!alumno?._id) {
+          agregarAlumno(values);
+        }
       },
     });
 
@@ -86,14 +90,14 @@ export const Registro = () => {
           <Grid size={12} style={marginGridItem}>
             <TextField
               fullWidth
-              id="nombre"
+              id="name"
               label="Nombre completo del alumno"
               variant="outlined"
-              value={values.nombre}
+              value={values.name}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.nombre && Boolean(errors.nombre)}
-              helperText={touched.nombre && errors.nombre}
+              error={touched.name && Boolean(errors.name)}
+              helperText={touched.name && errors.name}
             />
           </Grid>
 
@@ -207,15 +211,15 @@ export const Registro = () => {
           <Grid size={6} style={marginGridItem}>
             <TextField
               fullWidth
-              id="costo"
+              id="costoMensual"
               type="number"
               label="Costo Mensual"
               variant="outlined"
-              value={values.costo}
+              value={values.costoMensual}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.costo && Boolean(errors.costo)}
-              helperText={touched.costo && errors.costo}
+              error={touched.costoMensual && Boolean(errors.costoMensual)}
+              helperText={touched.costoMensual && errors.costoMensual}
             />
           </Grid>
 
@@ -234,13 +238,12 @@ export const Registro = () => {
             />
           </Grid>
 
-          {!alumno?.id ? (
+          {!alumno?._id ? (
             <Grid size={2}>
               <Button
                 style={{ backgroundColor: "green" }}
                 variant="contained"
                 type="submit"
-                onClick={() => openSnack("Agregar")}
               >
                 Agregar
               </Button>

@@ -1,5 +1,5 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import { Button, Grid } from "@mui/material";
+import { Button, CircularProgress, Grid } from "@mui/material";
 import { Registro } from "./Registro/Registro";
 import { useStore } from "../../store/useStore";
 import { useAlumnos } from "./hooks/useAlumnos";
@@ -8,7 +8,7 @@ const paginationModel = { page: 0, pageSize: 5 };
 
 export const Alumnos = () => {
   const { alumno, selectAlumno, newAlumno } = useStore();
-  const { rowsAlumnos } = useAlumnos();
+  const { rowsAlumnos, loading } = useAlumnos();
 
   const columns: GridColDef[] = [
     { field: "_id", headerName: "ID", width: 70 },
@@ -29,9 +29,9 @@ export const Alumnos = () => {
     },
   ];
 
-  return (
-    <>
-      {!alumno ? (
+  const drawAlumnos = () => {
+    if (!alumno) {
+      return (
         <Grid container spacing={2}>
           <Grid>
             <Button
@@ -61,8 +61,27 @@ export const Alumnos = () => {
             />
           </Grid>
         </Grid>
+      );
+    } else {
+      return <Registro />;
+    }
+  };
+
+  return (
+    <>
+      {loading ? (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <CircularProgress />
+        </div>
       ) : (
-        <Registro />
+        drawAlumnos()
       )}
     </>
   );
