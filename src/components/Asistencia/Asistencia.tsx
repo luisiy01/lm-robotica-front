@@ -2,15 +2,11 @@ import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import {
-  Box,
-  Button,
   Chip,
   Grid,
-  Modal,
   Stack,
   ToggleButton,
   ToggleButtonGroup,
-  Typography,
 } from "@mui/material";
 
 function createData(id: number, nombre: string, semana: any) {
@@ -24,18 +20,6 @@ const rows = [
 ];
 
 const paginationModel = { page: 0, pageSize: 5 };
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 export const Asistencia = () => {
   const columns: GridColDef[] = [
@@ -195,22 +179,6 @@ export const Asistencia = () => {
     },
   ];
 
-  const [open, setOpen] = useState(false);
-  type Alumno = {
-    id: number;
-    nombre: string;
-    costo: number;
-    diaCobro: number;
-    statusPago: boolean;
-  };
-
-  const [alumno, setAlumno] = useState<Alumno | null>(null);
-
-  const handleOpen = (rowSelected: any) => {
-    setAlumno(rowSelected);
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
   return (
     <Grid container spacing={2}>
       <Grid size={12}>
