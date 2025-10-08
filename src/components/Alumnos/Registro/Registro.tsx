@@ -23,7 +23,7 @@ const marginGridItem = {
 
 export const Registro = () => {
   const { alumno, disSelectAlumno } = useStore();
-  const { agregarAlumno, modificarAlumno } = useRegistro(toast);
+  const { agregarAlumno, modificarAlumno, eliminarAlumno } = useRegistro(toast);
 
   const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
     useFormik({
@@ -237,6 +237,7 @@ export const Registro = () => {
                   style={{ backgroundColor: "red" }}
                   variant="contained"
                   type="button"
+                  onClick={() => eliminarAlumno(alumno._id!)}
                 >
                   Eliminar
                 </Button>

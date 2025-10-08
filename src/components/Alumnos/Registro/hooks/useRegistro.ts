@@ -1,5 +1,9 @@
 import type { Alumno } from "../../../../interfaces/Alumno";
-import { addAlumno, updateAlumno } from "../../../../services/alumno.service";
+import {
+  addAlumno,
+  updateAlumno,
+  deleteAlumno,
+} from "../../../../services/alumno.service";
 import { useStore } from "../../../../store/useStore";
 
 export const useRegistro = (toast: any) => {
@@ -70,8 +74,34 @@ export const useRegistro = (toast: any) => {
     });
   };
 
+  const eliminarAlumno = (id: string) => {
+    const fetchDataPromise = new Promise((resolve, reject) => {
+      deleteAlumno(id)
+        .then((alumnoResponse) => {
+          if (alumnoResponse.status === 200) {
+            resolve(alumnoResponse.data);
+          }
+          reject();
+        })
+        .catch((error) => {
+          console.log("error", error);
+          reject(error);
+        })
+        .finally(() => {
+          disSelectAlumno();
+        });
+    });
+
+    toast.promise(fetchDataPromise, {
+      pending: "Eliminando Alumno",
+      success: "Alumno Eliminado Correctamente",
+      error: "Error al Eliminar Alumno",
+    });
+  };
+
   return {
     agregarAlumno,
     modificarAlumno,
+    eliminarAlumno,
   };
 };
