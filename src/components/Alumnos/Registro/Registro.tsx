@@ -8,16 +8,14 @@ import {
   TextField,
   Typography,
   IconButton,
-  Alert,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useStore } from "../../../store/useStore";
 import { useFormik } from "formik";
 import { diasHabiles, horasHbiles } from "../../../lib/Constants";
 import { validationSchema } from "./Validations";
-import Snackbar, { type SnackbarCloseReason } from "@mui/material/Snackbar";
-import { useState } from "react";
 import { useRegistro } from "./hooks/useRegistro";
+import { ToastContainer, toast } from "react-toastify";
 
 const marginGridItem = {
   marginBottom: 8,
@@ -25,7 +23,7 @@ const marginGridItem = {
 
 export const Registro = () => {
   const { alumno, disSelectAlumno } = useStore();
-  const { agregarAlumno } = useRegistro();
+  const { agregarAlumno } = useRegistro(toast);
 
   const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
     useFormik({
@@ -46,36 +44,6 @@ export const Registro = () => {
         }
       },
     });
-
-  const [open, setOpen] = useState(false);
-  const [snackMessage, setSnackMessage] = useState("");
-
-  const openSnack = (buttonClicked: string) => {
-    switch (buttonClicked) {
-      case "Agregar":
-        setSnackMessage("Alumno Agregado");
-        break;
-      case "Modificar":
-        setSnackMessage("Alumno Modificado");
-        break;
-      case "Eliminar":
-        setSnackMessage("Alumno Eliminado");
-        break;
-    }
-    setOpen(true);
-    //disSelectAlumno();
-  };
-
-  const handleClose = (
-    _event: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   return (
     <>
@@ -251,11 +219,7 @@ export const Registro = () => {
           ) : (
             <>
               <Grid size={2}>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  onClick={() => openSnack("Modificar")}
-                >
+                <Button variant="contained" type="submit">
                   Modificar
                 </Button>
               </Grid>
@@ -265,7 +229,6 @@ export const Registro = () => {
                   style={{ backgroundColor: "red" }}
                   variant="contained"
                   type="button"
-                  onClick={() => openSnack("Eliminar")}
                 >
                   Eliminar
                 </Button>
@@ -274,16 +237,7 @@ export const Registro = () => {
           )}
         </Grid>
       </form>
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {snackMessage}
-        </Alert>
-      </Snackbar>
+      <ToastContainer />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { addAlumno } from "../../../../services/alumno.service";
 
-export const useRegistro = () => {
+export const useRegistro = (toast: any) => {
   const agregarAlumno = (formData: any) => {
     formData["fecha1"] = `${formData["dia1"]} ${formData["hora1"]}`;
     formData["fecha2"] = `${formData["dia2"]} ${formData["hora2"]}`;
@@ -9,15 +9,25 @@ export const useRegistro = () => {
     delete formData["hora1"];
     delete formData["hora2"];
 
-    addAlumno(formData)
-      .then((alumnoResponse) => {
-        if (alumnoResponse.status === 201) {
-          // alumno creado
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+    const fetchDataPromise = new Promise((resolve, reject) => {
+      addAlumno(formData)
+        .then((alumnoResponse) => {
+          if (alumnoResponse.status === 201) {
+            resolve(alumnoResponse.data);
+          }
+          reject();
+        })
+        .catch((error) => {
+          console.log("error", error);
+          reject(error);
+        });
+    });
+
+    toast.promise(fetchDataPromise, {
+      pending: "Agregando Alumno",
+      success: "Alumno Agregado Correctamente",
+      error: "Error al Agregar Alumno",
+    });
   };
 
   return {
