@@ -26,6 +26,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Alumnos } from "../Alumnos/Alumnos";
 import { menuOptions } from "../../lib/Constants";
 import { useDashboard } from "./hooks/useDashboard";
+import { ToastContainer } from "react-toastify";
 
 export const Dashboard = () => {
   const {
@@ -143,6 +144,7 @@ export const Dashboard = () => {
         {drawerItemSelected === 1 && <Pagos />}
         {drawerItemSelected === 2 && <Alumnos />}
       </Box>
+      <ToastContainer />
     </Box>
   );
 };

@@ -1,6 +1,9 @@
 import { addAlumno } from "../../../../services/alumno.service";
+import { useStore } from "../../../../store/useStore";
 
 export const useRegistro = (toast: any) => {
+  const { disSelectAlumno } = useStore();
+
   const agregarAlumno = (formData: any) => {
     formData["fecha1"] = `${formData["dia1"]} ${formData["hora1"]}`;
     formData["fecha2"] = `${formData["dia2"]} ${formData["hora2"]}`;
@@ -20,6 +23,9 @@ export const useRegistro = (toast: any) => {
         .catch((error) => {
           console.log("error", error);
           reject(error);
+        })
+        .finally(() => {
+          disSelectAlumno();
         });
     });
 

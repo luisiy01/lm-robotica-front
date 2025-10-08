@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import { diasHabiles, horasHbiles } from "../../../lib/Constants";
 import { validationSchema } from "./Validations";
 import { useRegistro } from "./hooks/useRegistro";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 
 const marginGridItem = {
   marginBottom: 8,
@@ -236,8 +236,7 @@ export const Registro = () => {
             </>
           )}
         </Grid>
-      </form>
-      <ToastContainer />
+      </form>      
     </>
   );
 };

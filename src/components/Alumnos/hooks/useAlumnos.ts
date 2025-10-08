@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { getAlumnos } from "../../../services/alumno.service";
+import { useStore } from "../../../store/useStore";
 
 export const useAlumnos = () => {
+  const { alumno } = useStore();
   const [rowsAlumnos, setRowsAlumnos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     listaDeAlumnos();
-  }, []);
+  }, [alumno]);
 
   const listaDeAlumnos = async () => {
     setLoading(true);
