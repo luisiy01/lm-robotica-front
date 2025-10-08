@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import { diasHabiles, horasHbiles } from "../../../lib/Constants";
 import { validationSchema } from "./Validations";
 import { useRegistro } from "./hooks/useRegistro";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const marginGridItem = {
   marginBottom: 8,
@@ -29,13 +29,19 @@ export const Registro = () => {
     useFormik({
       initialValues: {
         name: alumno?.name || "",
-        diaCobro: "",
-        costoMensual: "",
-        contacto: "",
-        dia1: "",
-        hora1: "",
-        dia2: "",
-        hora2: "",
+        diaCobro: alumno?.diaCobro,
+        costoMensual: alumno?.costoMensual,
+        contacto: alumno?.contacto,
+        dia1: alumno?.fecha1.split(" ")[0],
+        hora1: alumno?.fecha1
+          .split(" ")
+          .slice(1, alumno?.fecha1.length - 2)
+          .join(" "),
+        dia2: alumno?.fecha2.split(" ")[0],
+        hora2: alumno?.fecha2
+          .split(" ")
+          .slice(1, alumno?.fecha1.length - 2)
+          .join(" "),
       },
       validationSchema: validationSchema,
       onSubmit: (values) => {
@@ -236,7 +242,7 @@ export const Registro = () => {
             </>
           )}
         </Grid>
-      </form>      
+      </form>
     </>
   );
 };
