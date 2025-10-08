@@ -23,7 +23,7 @@ const marginGridItem = {
 
 export const Registro = () => {
   const { alumno, disSelectAlumno } = useStore();
-  const { agregarAlumno } = useRegistro(toast);
+  const { agregarAlumno, modificarAlumno } = useRegistro(toast);
 
   const { handleSubmit, values, handleChange, handleBlur, touched, errors } =
     useFormik({
@@ -47,6 +47,8 @@ export const Registro = () => {
       onSubmit: (values) => {
         if (!alumno?._id) {
           agregarAlumno(values);
+        } else {
+          modificarAlumno(alumno, values);
         }
       },
     });
