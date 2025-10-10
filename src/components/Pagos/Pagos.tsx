@@ -1,27 +1,10 @@
-import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import type { GridColDef } from "@mui/x-data-grid";
 import { Box, Button, Grid, Modal, Typography } from "@mui/material";
-
-function createData(
-  id: number,
-  nombre: string,
-  costo: number,
-  diaCobro: number,
-  statusPago: boolean
-) {
-  return { id, nombre, costo, diaCobro, statusPago };
-}
-
-const rows = [
-  createData(1, "Bruno Gael Barajas Sanches", 800, 1, true),
-  createData(2, "Eder Rodriguez Rodriguez", 1100, 1, false),
-  createData(3, "Bastian Kaleb Gaitan Ayala", 800, 4, true),
-];
+import { usePagos } from "./hooks/usePagos";
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-const style = {
+const boxStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -34,66 +17,26 @@ const style = {
 };
 
 export const Pagos = () => {
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "nombre", headerName: "Nombre", width: 250 },
-    { field: "costo", headerName: "Costo", width: 70 },
-    {
-      field: "diaCobro",
-      headerName: "Dia de Cobro",
-      type: "number",
-      width: 110,
-    },
-    {
-      field: "statusPago",
-      headerName: "Pago",
-      width: 190,
-      renderCell: (params) => {
-        if (params.row.statusPago) {
-          return (
-            <Button style={{ backgroundColor: "green" }} variant="contained">
-              Pagado
-            </Button>
-          );
-        }
-        return (
-          <Button
-            onClick={() => handleOpen(params.row)}
-            style={{ backgroundColor: "#ffcc00" }}
-            variant="contained"
-          >
-            Registrar Pago
-          </Button>
-        );
-      },
-    },
-  ];
+  const { rows, columns, open, handleClose, alumno } = usePagos();
 
-  const [open, setOpen] = useState(false);
-  type Alumno = {
-    id: number;
-    nombre: string;
-    costo: number;
-    diaCobro: number;
-    statusPago: boolean;
-  };
-
-  const [alumno, setAlumno] = useState<Alumno | null>(null);
-
-  const handleOpen = (rowSelected: any) => {
-    setAlumno(rowSelected);
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
   return (
     <Grid container spacing={2}>
       <Grid size={12}>
         <DataGrid
           rows={rows}
+          //getRowId={(row) => row._id}
           columns={columns}
-          initialState={{ pagination: { paginationModel } }}
+          initialState={{
+            pagination: { paginationModel },
+            columns: {
+              columnVisibilityModel: {
+                _id: false,
+              },
+            },
+          }}
           pageSizeOptions={[5, 10]}
           sx={{ border: 0 }}
+          disableRowSelectionOnClick
         />
       </Grid>
       <Grid>
@@ -106,7 +49,7 @@ export const Pagos = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={boxStyle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {`Registrar pago para ${alumno ? alumno?.nombre : ""}`}
           </Typography>
