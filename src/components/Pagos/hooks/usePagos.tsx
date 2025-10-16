@@ -13,6 +13,16 @@ export const usePagos = () => {
   };
   const [alumno, setAlumno] = useState<Alumno | null>(null);
   const [open, setOpen] = useState(false);
+  const [mesSeleccionado, setMesSeleccionado] = useState(
+    new Date().getMonth() + 1
+  );
+  const [yearSeleccionado, _setYearSeleccionado] = useState(
+    new Date().getFullYear()
+  );
+
+  useEffect(() => {
+    listaDePagos();
+  }, [mesSeleccionado, yearSeleccionado]);
 
   const handleOpen = (rowSelected: any) => {
     setAlumno(rowSelected);
@@ -72,14 +82,11 @@ export const usePagos = () => {
     createData(3, "Bastian Kaleb Gaitan Ayala", 800, 4, true),
   ];
 
-  useEffect(() => {
-    listaDePagos();
-  }, []);
-  //getAllPagos()
-
   const listaDePagos = async () => {
     // setLoading(true);
-    getAllPagos()
+    getAllPagos({
+      periodo: `${mesSeleccionado}-${yearSeleccionado}`,
+    })
       .then((listaPagos) => {
         console.log(listaPagos);
         if (listaPagos.status === 200) {
@@ -97,11 +104,17 @@ export const usePagos = () => {
       });
   };
 
+  const isChipSelected = (mes: number) => {
+    return mesSeleccionado === mes ? true : false;
+  };
+
   return {
     rows,
     columns,
     open,
     handleClose,
     alumno,
+    isChipSelected,
+    setMesSeleccionado,
   };
 };
