@@ -15,10 +15,10 @@ export const diasHabiles: string[] = [
   "Sabado",
 ];
 
-export const horasHbiles: string[] = [
-  "15:00 - 16:00",
-  "16:00 - 17:00",
-  "17:00 - 18:00",
-  "18:00 - 19:00",
-  "19:00 - 20:00",
+export const horasHbiles: string[] = [  
+  "10:30 - 11:30",
+  "11:30 - 13:00",
+  "15:30 - 17:00",
+  "17:00 - 18:30",
+  "18:30 - 20:00",  
 ];

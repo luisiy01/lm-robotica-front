@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import type { GridColDef } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAllPagos } from "../../../services/pagos.service";
 
 export const usePagos = () => {
   type Alumno = {
@@ -70,6 +71,31 @@ export const usePagos = () => {
     createData(2, "Eder Rodriguez Rodriguez", 1100, 1, false),
     createData(3, "Bastian Kaleb Gaitan Ayala", 800, 4, true),
   ];
+
+  useEffect(() => {
+    listaDePagos();
+  }, []);
+  //getAllPagos()
+
+  const listaDePagos = async () => {
+    // setLoading(true);
+    getAllPagos()
+      .then((listaPagos) => {
+        console.log(listaPagos);
+        if (listaPagos.status === 200) {
+          //setRowsAlumnos(listAlumnos.data);
+          return;
+        }
+        //setRowsAlumnos([]);
+      })
+      .catch((error) => {
+        console.log("error", error);
+        //setRowsAlumnos([]);
+      })
+      .finally(() => {
+        //setLoading(false);
+      });
+  };
 
   return {
     rows,
