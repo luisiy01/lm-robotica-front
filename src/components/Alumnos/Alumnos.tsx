@@ -1,5 +1,5 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import { Button, CircularProgress, Grid } from "@mui/material";
+import { Button,  CircularProgress,  Grid } from "@mui/material";
 import { Registro } from "./Registro/Registro";
 import { useStore } from "../../store/useStore";
 import { useAlumnos } from "./hooks/useAlumnos";
@@ -70,16 +70,7 @@ export const Alumnos = () => {
   return (
     <>
       {loading ? (
-        <div
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <CircularProgress />
-        </div>
+        <CircularProgress/>
       ) : (
         drawAlumnos()
       )}

@@ -19,6 +19,8 @@ export const usePagos = () => {
   const [yearSeleccionado, _setYearSeleccionado] = useState(
     new Date().getFullYear()
   );
+  const [rowsPagos, setRowsPagos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     listaDePagos();
@@ -44,6 +46,8 @@ export const usePagos = () => {
     {
       field: "statusPago",
       headerName: "Pago",
+      sortable: false,
+      filterable: false,      
       width: 190,
       renderCell: (params) => {
         if (params.row.statusPago) {
@@ -66,41 +70,35 @@ export const usePagos = () => {
     },
   ];
 
-  function createData(
-    id: number,
-    nombre: string,
-    costo: number,
-    diaCobro: number,
-    statusPago: boolean
-  ) {
-    return { id, nombre, costo, diaCobro, statusPago };
-  }
-
-  const rows = [
-    createData(1, "Bruno Gael Barajas Sanches", 800, 1, true),
-    createData(2, "Eder Rodriguez Rodriguez", 1100, 1, false),
-    createData(3, "Bastian Kaleb Gaitan Ayala", 800, 4, true),
-  ];
-
   const listaDePagos = async () => {
-    // setLoading(true);
+    setLoading(true);
     getAllPagos({
       periodo: `${mesSeleccionado}-${yearSeleccionado}`,
     })
       .then((listaPagos) => {
-        console.log(listaPagos);
-        if (listaPagos.status === 200) {
-          //setRowsAlumnos(listAlumnos.data);
+        if (listaPagos.status === 200) {          
+          console.log(listaPagos.data);
+          const newData: any[] = [];
+          listaPagos.data.forEach((data: any) => {
+            newData.push({
+              id: data.pago._id,
+              nombre: data.alumno.name,
+              costo: data.alumno.costoMensual,
+              diaCobro: data.alumno.diaCobro,
+              statusPago: data.pago.pagado,
+              responseData: data,
+            });
+          });
+          setRowsPagos(newData);
           return;
-        }
-        //setRowsAlumnos([]);
+        }        
       })
       .catch((error) => {
         console.log("error", error);
-        //setRowsAlumnos([]);
+        setRowsPagos([]);
       })
       .finally(() => {
-        //setLoading(false);
+        setLoading(false);
       });
   };
 
@@ -109,12 +107,13 @@ export const usePagos = () => {
   };
 
   return {
-    rows,
+    rowsPagos,
     columns,
     open,
     handleClose,
     alumno,
     isChipSelected,
     setMesSeleccionado,
+    loading,
   };
 };
