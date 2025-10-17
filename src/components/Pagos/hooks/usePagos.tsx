@@ -47,7 +47,7 @@ export const usePagos = () => {
       field: "statusPago",
       headerName: "Pago",
       sortable: false,
-      filterable: false,      
+      filterable: false,
       width: 190,
       renderCell: (params) => {
         if (params.row.statusPago) {
@@ -76,7 +76,7 @@ export const usePagos = () => {
       periodo: `${mesSeleccionado}-${yearSeleccionado}`,
     })
       .then((listaPagos) => {
-        if (listaPagos.status === 200) {          
+        if (listaPagos.status === 200) {
           console.log(listaPagos.data);
           const newData: any[] = [];
           listaPagos.data.forEach((data: any) => {
@@ -91,7 +91,7 @@ export const usePagos = () => {
           });
           setRowsPagos(newData);
           return;
-        }        
+        }
       })
       .catch((error) => {
         console.log("error", error);
@@ -115,5 +115,6 @@ export const usePagos = () => {
     isChipSelected,
     setMesSeleccionado,
     loading,
+    listaDePagos
   };
 };

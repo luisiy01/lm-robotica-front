@@ -17,6 +17,7 @@ export const Pagos = () => {
     isChipSelected,
     setMesSeleccionado,
     loading,
+    listaDePagos
   } = usePagos();
 
   return (
@@ -55,6 +56,7 @@ export const Pagos = () => {
           open,
           handleClose,
           alumno,
+          listaDePagos
         }}
       />
     </Grid>

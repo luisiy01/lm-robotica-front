@@ -1,8 +1,9 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import { Button,  CircularProgress,  Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { Registro } from "./Registro/Registro";
 import { useStore } from "../../store/useStore";
 import { useAlumnos } from "./hooks/useAlumnos";
+import { CircularLoader } from "../common/CircularLoader";
 
 const paginationModel = { page: 0, pageSize: 5 };
 
@@ -67,13 +68,5 @@ export const Alumnos = () => {
     }
   };
 
-  return (
-    <>
-      {loading ? (
-        <CircularProgress/>
-      ) : (
-        drawAlumnos()
-      )}
-    </>
-  );
+  return <>{loading ? <CircularLoader /> : drawAlumnos()}</>;
 };

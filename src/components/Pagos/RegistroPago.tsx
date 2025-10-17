@@ -1,9 +1,12 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
+import { useRegistroPago } from "./hooks/useRegistroPago";
+import { toast } from "react-toastify";
 
 interface myProps {
   open: boolean;
   handleClose: () => void;
   alumno: any;
+  listaDePagos: () => void;
 }
 
 const boxStyle = {
@@ -18,7 +21,19 @@ const boxStyle = {
   p: 4,
 };
 
-export const RegistroPago = ({ open, handleClose, alumno }: myProps) => {
+export const RegistroPago = ({
+  open,
+  handleClose,
+  alumno,
+  listaDePagos,
+}: myProps) => {
+  const { registrarPago, isDisabledButtons } = useRegistroPago(
+    alumno,
+    toast,
+    handleClose,
+    listaDePagos
+  );
+
   return (
     <Modal
       open={open}
@@ -39,7 +54,13 @@ export const RegistroPago = ({ open, handleClose, alumno }: myProps) => {
             month: "long",
           })} ${new Date().getFullYear()}`}
         </Typography>
-        <Button fullWidth variant="contained" style={{ marginBottom: 8 }}>
+        <Button
+          fullWidth
+          variant="contained"
+          style={{ marginBottom: 8 }}
+          onClick={() => registrarPago(1100, "1 mes")}
+          disabled={isDisabledButtons}
+        >
           1 Mes - $1,100
         </Button>
         <Button fullWidth variant="contained" style={{ marginBottom: 8 }}>
