@@ -5,7 +5,9 @@ export const useRegistroPago = (
   alumno: any,
   toast: any,
   handleClose: any,
-  listaDePagos: any
+  listaDePagos: any,
+  mesSeleccionado: number,
+  yearSeleccionado: number
 ) => {
   const [isDisabledButtons, setIsDisabledButtons] = useState(false);
 
@@ -14,7 +16,7 @@ export const useRegistroPago = (
     const patchDataPromise = new Promise((resolve, reject) => {
       pagarAlumno(alumno.responseData.pago._id, {
         alumnoId: alumno.responseData.pago.alumnoId,
-        periodoPagado: alumno.responseData.pago.periodoDePago,
+        periodoPagado: `${mesSeleccionado}-${yearSeleccionado}`,
         totalPagado: totalPagado,
         nombrePaquete: nombrePaquete,
         pagado: true,

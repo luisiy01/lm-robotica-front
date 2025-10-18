@@ -115,6 +115,8 @@ export const usePagos = () => {
     isChipSelected,
     setMesSeleccionado,
     loading,
-    listaDePagos
+    listaDePagos,
+    mesSeleccionado,
+    yearSeleccionado
   };
 };

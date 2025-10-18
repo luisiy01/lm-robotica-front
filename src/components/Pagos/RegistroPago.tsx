@@ -7,6 +7,8 @@ interface myProps {
   handleClose: () => void;
   alumno: any;
   listaDePagos: () => void;
+  mesSeleccionado: number;
+  yearSeleccionado: number;
 }
 
 const boxStyle = {
@@ -26,12 +28,16 @@ export const RegistroPago = ({
   handleClose,
   alumno,
   listaDePagos,
+  mesSeleccionado,
+  yearSeleccionado,
 }: myProps) => {
   const { registrarPago, isDisabledButtons } = useRegistroPago(
     alumno,
     toast,
     handleClose,
-    listaDePagos
+    listaDePagos,
+    mesSeleccionado,
+    yearSeleccionado
   );
 
   return (
@@ -63,10 +69,22 @@ export const RegistroPago = ({
         >
           1 Mes - $1,100
         </Button>
-        <Button fullWidth variant="contained" style={{ marginBottom: 8 }}>
+        <Button
+          fullWidth
+          variant="contained"
+          style={{ marginBottom: 8 }}
+          onClick={() => registrarPago(2400, "3 meses")}
+          disabled={isDisabledButtons}
+        >
           3 Mes - $2,400
         </Button>
-        <Button fullWidth variant="contained" style={{ marginBottom: 8 }}>
+        <Button
+          fullWidth
+          variant="contained"
+          style={{ marginBottom: 8 }}
+          onClick={() => registrarPago(4000, "6 meses")}
+          disabled={isDisabledButtons}
+        >
           6 Mes - $4,000
         </Button>
         <Button fullWidth variant="contained" style={{ marginBottom: 8 }}>
