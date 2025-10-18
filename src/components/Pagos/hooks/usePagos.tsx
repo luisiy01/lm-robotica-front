@@ -16,7 +16,7 @@ export const usePagos = () => {
   const [mesSeleccionado, setMesSeleccionado] = useState(
     new Date().getMonth() + 1
   );
-  const [yearSeleccionado, _setYearSeleccionado] = useState(
+  const [yearSeleccionado, setYearSeleccionado] = useState(
     new Date().getFullYear()
   );
   const [rowsPagos, setRowsPagos] = useState<any[]>([]);
@@ -106,6 +106,14 @@ export const usePagos = () => {
     return mesSeleccionado === mes ? true : false;
   };
 
+  const nextYear = () => {
+    setYearSeleccionado(yearSeleccionado + 1);
+  };
+
+  const backYear = () => {
+    setYearSeleccionado(yearSeleccionado - 1);
+  };
+
   return {
     rowsPagos,
     columns,
@@ -117,6 +125,8 @@ export const usePagos = () => {
     loading,
     listaDePagos,
     mesSeleccionado,
-    yearSeleccionado
+    yearSeleccionado,
+    nextYear,
+    backYear
   };
 };

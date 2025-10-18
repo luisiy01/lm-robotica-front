@@ -20,6 +20,8 @@ export const Pagos = () => {
     listaDePagos,
     mesSeleccionado,
     yearSeleccionado,
+    nextYear,
+    backYear,
   } = usePagos();
 
   return (
@@ -28,6 +30,9 @@ export const Pagos = () => {
         {...{
           isChipSelected,
           setMesSeleccionado,
+          nextYear,
+          backYear,
+          yearSeleccionado
         }}
       />
 
