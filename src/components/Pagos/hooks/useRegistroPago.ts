@@ -10,6 +10,7 @@ export const useRegistroPago = (
   yearSeleccionado: number
 ) => {
   const [isDisabledButtons, setIsDisabledButtons] = useState(false);
+  const [montoPersonalizado, setMontoPersonalizado] = useState('');
 
   const registrarPago = async (totalPagado: number, nombrePaquete: string) => {
     setIsDisabledButtons(true);
@@ -45,8 +46,11 @@ export const useRegistroPago = (
       error: "Error al Pagar Alumno",
     });
   };
+
   return {
     registrarPago,
     isDisabledButtons,
+    montoPersonalizado,
+    setMontoPersonalizado
   };
 };

@@ -1,4 +1,4 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useRegistroPago } from "./hooks/useRegistroPago";
 import { toast } from "react-toastify";
 
@@ -31,7 +31,12 @@ export const RegistroPago = ({
   mesSeleccionado,
   yearSeleccionado,
 }: myProps) => {
-  const { registrarPago, isDisabledButtons } = useRegistroPago(
+  const {
+    registrarPago,
+    isDisabledButtons,
+    montoPersonalizado,
+    setMontoPersonalizado,
+  } = useRegistroPago(
     alumno,
     toast,
     handleClose,
@@ -87,7 +92,24 @@ export const RegistroPago = ({
         >
           6 Mes - $4,000
         </Button>
-        <Button fullWidth variant="contained" style={{ marginBottom: 8 }}>
+
+        <TextField
+          fullWidth
+          id="montoPersonalizado"
+          type="number"
+          label="Monto Personalizado ($1000)"
+          variant="outlined"
+          sx={{ marginTop: 4, marginBottom: 1 }}
+          value={montoPersonalizado}
+          onChange={(e) => setMontoPersonalizado(e.target.value)}          
+        />
+        <Button
+          fullWidth
+          variant="contained"
+          style={{ marginBottom: 8 }}
+          disabled={montoPersonalizado.length === 0}
+          onClick={() => registrarPago(+montoPersonalizado, "personalizado")}
+        >
           Monto Personalizado ($1000.00)
         </Button>
       </Box>
