@@ -4,6 +4,7 @@ import { usePagos } from "./hooks/usePagos";
 import { ChipsMeses } from "./ChipsMeses";
 import { CircularLoader } from "../common/CircularLoader";
 import { RegistroPago } from "./RegistroPago";
+import CsvDownloader from "react-csv-downloader";
 
 const paginationModel = { page: 0, pageSize: 5 };
 
@@ -22,6 +23,8 @@ export const Pagos = () => {
     yearSeleccionado,
     nextYear,
     backYear,
+    getReporte,
+    columnasReporte,
   } = usePagos();
 
   return (
@@ -32,7 +35,7 @@ export const Pagos = () => {
           setMesSeleccionado,
           nextYear,
           backYear,
-          yearSeleccionado
+          yearSeleccionado,
         }}
       />
 
@@ -55,7 +58,17 @@ export const Pagos = () => {
         />
       </Grid>
       <Grid>
-        <Button variant="contained">Reporte de Pagos</Button>
+        <CsvDownloader
+          filename={`reportePagos-${mesSeleccionado}-${yearSeleccionado}`}
+          extension=".csv"
+          separator=";"
+          wrapColumnChar="'"
+          columns={columnasReporte}
+          datas={getReporte}
+          text="DOWNLOAD"
+        >
+          <Button variant="contained">Reporte de Pagos</Button>
+        </CsvDownloader>
       </Grid>
 
       <RegistroPago

@@ -3,6 +3,21 @@ import type { GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { getAllPagos } from "../../../services/pagos.service";
 
+const columnasReporte = [
+  {
+    id: "nombreAlumno",
+    displayName: "Nombre",
+  },
+  {
+    id: "fechaPago",
+    displayName: "Fecha Pago",
+  },
+  {
+    id: "monto",
+    displayName: "Monto",
+  },
+];
+
 export const usePagos = () => {
   type Alumno = {
     id: number;
@@ -20,6 +35,8 @@ export const usePagos = () => {
     new Date().getFullYear()
   );
   const [rowsPagos, setRowsPagos] = useState<any[]>([]);
+  const [csvRows, setCsvRows] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -90,12 +107,32 @@ export const usePagos = () => {
             });
           });
           setRowsPagos(newData);
+          let totalPagos = 0;
+          const csvData = listaPagos.data.map((data: any) => {
+            if (data.pago?.totalPagado) {
+              totalPagos = totalPagos + data.pago?.totalPagado;
+            }
+            return {
+              nombreAlumno: data.alumno.name,
+              fechaPago: data.pago?.fechaDePago
+                ? new Date(data.pago?.fechaDePago).toDateString()
+                : "PENDIENTE",
+              monto: data.pago?.totalPagado ? `$${data.pago?.totalPagado}` : "",
+            };
+          });
+          csvData.push({
+            nombreAlumno: "Total",
+            fechaPago: "",
+            monto: totalPagos,
+          });
+          setCsvRows(csvData);
           return;
         }
       })
       .catch((error) => {
         console.log("error", error);
         setRowsPagos([]);
+        setCsvRows([]);
       })
       .finally(() => {
         setLoading(false);
@@ -114,6 +151,10 @@ export const usePagos = () => {
     setYearSeleccionado(yearSeleccionado - 1);
   };
 
+  const getReporte = () => {
+    return csvRows;
+  };
+
   return {
     rowsPagos,
     columns,
@@ -127,6 +168,8 @@ export const usePagos = () => {
     mesSeleccionado,
     yearSeleccionado,
     nextYear,
-    backYear
+    backYear,
+    getReporte,
+    columnasReporte,
   };
 };
