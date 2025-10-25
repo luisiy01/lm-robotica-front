@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
-import {
-  Grid,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useAsistencia } from "./hooks/useAsistencia";
 import { ChipsMeses } from "../Pagos/ChipsMeses";
 
@@ -24,11 +20,13 @@ const paginationModel = { page: 0, pageSize: 5 };
 export const Asistencia = () => {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "nombre", headerName: "Nombre", width: 250 },
+    { field: "nombre", headerName: "Nombre", width: 210 },
     {
       field: "semana1",
       headerName: "Semana 1",
-      width: 250,
+      width: 200,
+      sortable: false,
+      filterable: false,
       renderCell: (_params) => {
         const [formats, setFormats] = useState<string[]>(() => []);
 
@@ -46,7 +44,12 @@ export const Asistencia = () => {
             aria-label="text formatting"
           >
             <ToggleButton
-              style={{ backgroundColor: "green", color: "white" }}
+              style={{
+                backgroundColor: "green",
+                color: "white",
+                width: 90,
+                fontSize: 12,
+              }}
               value="fecha1"
               aria-label="bold"
             >
@@ -54,7 +57,11 @@ export const Asistencia = () => {
               <br />
               15:30 - 17:00
             </ToggleButton>
-            <ToggleButton value="fecha2" aria-label="italic">
+            <ToggleButton
+              value="fecha2"
+              aria-label="italic"
+              style={{ width: 90, fontSize: 12 }}
+            >
               Miercoles
               <br />
               15:30 - 17:00
@@ -66,7 +73,9 @@ export const Asistencia = () => {
     {
       field: "semana2",
       headerName: "Semana 2",
-      width: 250,
+      width: 200,
+      sortable: false,
+      filterable: false,
       renderCell: (_params) => {
         const [formats, setFormats] = useState<string[]>(() => []);
 
@@ -84,7 +93,12 @@ export const Asistencia = () => {
             aria-label="text formatting"
           >
             <ToggleButton
-              style={{ backgroundColor: "green", color: "white" }}
+              style={{
+                backgroundColor: "green",
+                color: "white",
+                width: 90,
+                fontSize: 12,
+              }}
               value="fecha1"
               aria-label="bold"
             >
@@ -92,7 +106,11 @@ export const Asistencia = () => {
               <br />
               15:30 - 17:00
             </ToggleButton>
-            <ToggleButton value="fecha2" aria-label="italic">
+            <ToggleButton
+              value="fecha2"
+              aria-label="italic"
+              style={{ width: 90, fontSize: 12 }}
+            >
               Miercoles
               <br />
               15:30 - 17:00
@@ -104,7 +122,9 @@ export const Asistencia = () => {
     {
       field: "semana3",
       headerName: "Semana 3",
-      width: 250,
+      width: 200,
+      sortable: false,
+      filterable: false,
       renderCell: (_params) => {
         const [formats, setFormats] = useState<string[]>(() => []);
 
@@ -122,7 +142,12 @@ export const Asistencia = () => {
             aria-label="text formatting"
           >
             <ToggleButton
-              style={{ backgroundColor: "green", color: "white" }}
+              style={{
+                backgroundColor: "green",
+                color: "white",
+                width: 90,
+                fontSize: 12,
+              }}
               value="fecha1"
               aria-label="bold"
             >
@@ -130,7 +155,11 @@ export const Asistencia = () => {
               <br />
               15:30 - 17:00
             </ToggleButton>
-            <ToggleButton value="fecha2" aria-label="italic">
+            <ToggleButton
+              value="fecha2"
+              aria-label="italic"
+              style={{ width: 90, fontSize: 12 }}
+            >
               Miercoles
               <br />
               15:30 - 17:00
@@ -142,7 +171,9 @@ export const Asistencia = () => {
     {
       field: "semana4",
       headerName: "Semana 4",
-      width: 250,
+      width: 200,
+      sortable: false,
+      filterable: false,
       renderCell: (_params) => {
         const [formats, setFormats] = useState<string[]>(() => []);
 
@@ -160,7 +191,12 @@ export const Asistencia = () => {
             aria-label="text formatting"
           >
             <ToggleButton
-              // style={{ backgroundColor: "green", color: "white" }}
+              style={{
+                backgroundColor: "green",
+                color: "white",
+                width: 90,
+                fontSize: 12,
+              }}
               value="fecha1"
               aria-label="bold"
             >
@@ -168,7 +204,11 @@ export const Asistencia = () => {
               <br />
               15:30 - 17:00
             </ToggleButton>
-            <ToggleButton value="fecha2" aria-label="italic">
+            <ToggleButton
+              value="fecha2"
+              aria-label="italic"
+              style={{ width: 90, fontSize: 12 }}
+            >
               Miercoles
               <br />
               15:30 - 17:00
