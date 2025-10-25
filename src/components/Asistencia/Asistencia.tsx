@@ -2,12 +2,12 @@ import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import {
-  Chip,
   Grid,
-  Stack,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
+import { useAsistencia } from "./hooks/useAsistencia";
+import { ChipsMeses } from "../Pagos/ChipsMeses";
 
 function createData(id: number, nombre: string, semana: any) {
   return { id, nombre, semana };
@@ -179,45 +179,39 @@ export const Asistencia = () => {
     },
   ];
 
+  const {
+    isChipSelected,
+    setMesSeleccionado,
+    nextYear,
+    backYear,
+    yearSeleccionado,
+  } = useAsistencia();
+
   return (
     <Grid container spacing={2}>
-      <Grid size={12}>
-        <Stack direction="row" spacing={1}>
-          <Chip
-            label="Septiembre 2025"
-            component="a"
-            href="#basic-chip"
-            variant="outlined"
-            clickable
-          />
-          <Chip
-            label="Octubre 2025"
-            component="a"
-            href="#basic-chip"
-            clickable
-          />
-          <Chip
-            label="Noviembre 2025"
-            component="a"
-            href="#basic-chip"
-            variant="outlined"
-            clickable
-          />
-          <Chip
-            label="Diciembre 2025"
-            component="a"
-            href="#basic-chip"
-            variant="outlined"
-            clickable
-          />
-        </Stack>
-      </Grid>
+      <ChipsMeses
+        {...{
+          isChipSelected,
+          setMesSeleccionado,
+          nextYear,
+          backYear,
+          yearSeleccionado,
+        }}
+      />
+
       <Grid size={12}>
         <DataGrid
           rowHeight={120}
           rows={rows}
           columns={columns}
-          initialState={{ pagination: { paginationModel } }}
+          initialState={{
+            pagination: { paginationModel },
+            columns: {
+              columnVisibilityModel: {
+                id: false,
+              },
+            },
+          }}
           pageSizeOptions={[5, 10]}
           sx={{ border: 0 }}
         />

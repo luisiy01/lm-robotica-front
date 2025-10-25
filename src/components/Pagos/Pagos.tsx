@@ -39,7 +39,7 @@ export const Pagos = () => {
         }}
       />
 
-      {loading && <CircularLoader />}
+      {!loading && <CircularLoader />}
       <Grid size={12}>
         <DataGrid
           rows={rowsPagos}
