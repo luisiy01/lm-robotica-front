@@ -10,7 +10,7 @@ export const Asistencia = () => {
     nextYear,
     backYear,
     yearSeleccionado,
-    rows,
+    rowsAsistencia,
     paginationModel,
     columns,
   } = useAsistencia();
@@ -30,13 +30,13 @@ export const Asistencia = () => {
       <Grid size={12}>
         <DataGrid
           rowHeight={120}
-          rows={rows}
+          rows={rowsAsistencia}
           columns={columns}
           initialState={{
             pagination: { paginationModel },
             columns: {
               columnVisibilityModel: {
-                id: false,
+                id: false,                
               },
             },
           }}
