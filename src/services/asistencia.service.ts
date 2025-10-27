@@ -11,3 +11,15 @@ export const getAllAsistencias = async (params?: any): Promise<any> => {
     console.error(error);
   }
 };
+
+export const actualizarAsistencia = async (
+  id: string,
+  postData: any
+): Promise<any> => {
+  try {
+    const response = await axios.patch(`${apiUrl}/asistencia/${id}`, postData);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};

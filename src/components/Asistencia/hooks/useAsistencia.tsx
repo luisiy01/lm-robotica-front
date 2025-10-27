@@ -1,17 +1,11 @@
 import { useEffect, useState } from "react";
 import type { GridColDef } from "@mui/x-data-grid";
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { getAllAsistencias } from "../../../services/asistencia.service";
-
-/* function createData(id: number, nombre: string, semana: any) {
-  return { id, nombre, semana };
-}
-
-const rows = [
-  createData(1, "Bruno Gael Barajas Sanches", ["Lunes", "Miercoles"]),
-  createData(2, "Eder Rodriguez Rodriguez", ["Lunes", "Miercoles"]),
-  createData(3, "Bastian Kaleb Gaitan Ayala", ["Lunes", "Miercoles"]),
-]; */
+import { Button } from "@mui/material";
+import {
+  actualizarAsistencia,
+  getAllAsistencias,
+} from "../../../services/asistencia.service";
+import { toast } from "react-toastify";
 
 const paginationModel = { page: 0, pageSize: 5 };
 
@@ -24,25 +18,57 @@ export const useAsistencia = () => {
   );
   const [rowsAsistencia, setRowsAsistencia] = useState<any[]>([]);
 
-  const renderButtons = (params) => {
-    const [formats, setFormats] = useState<string[]>(() => []);
-    const handleFormat = (
-      _event: React.MouseEvent<HTMLElement>,
-      newFormats: string[]
-    ) => {
-      setFormats(newFormats);
-    };
+  const onClickAsistencia = async (
+    row: any,
+    numFecha: number,
+    numSemana: number
+  ) => {
+    //  setIsDisabledButtons(true);
 
-    const semanaActual = params.row.semana.find(
-      (item: any) => item.numSemana === 1
+    const valFechas = row.semana.find(
+      (sem: any) => sem.numSemana === numSemana
     );
+
+    const patchDataPromise = new Promise((resolve, reject) => {
+      actualizarAsistencia(row.id, {
+        alumnoId: row.alumnoId,
+        numSemana: numSemana,
+        fecha1: numFecha === 1 ? !valFechas.dia1 : valFechas.dia1,
+        fecha2: numFecha === 2 ? !valFechas.dia2 : valFechas.dia2,
+      })
+        .then((respuestaAsistencia) => {
+          console.log("respuesta Asistencia", respuestaAsistencia);
+          if (respuestaAsistencia.status === 200) {
+            resolve("");
+          }
+          reject();
+        })
+        .catch((error) => {
+          console.log("error", error);
+          reject(error);
+        })
+        .finally(() => {
+          //setIsDisabledButtons(false);
+          //handleClose();
+          listaDeAsistencia();
+        });
+    });
+
+    toast.promise(patchDataPromise, {
+      pending: "Guardando Asistencia",
+      success: "Asistencia Actualizada",
+      error: "Error al Actualizar la asistencia",
+    });
+  };
+
+  const renderButtons = (params: any, semana: number) => {
+    const semanaActual = params.row.semana.find(
+      (item: any) => item.numSemana === semana
+    );
+    console.log("params", params);
     return (
-      <ToggleButtonGroup
-        value={formats}
-        onChange={handleFormat}
-        aria-label="text formatting"
-      >
-        <ToggleButton
+      <>
+        <Button
           style={{
             backgroundColor: semanaActual.dia1 ? "green" : "",
             color: semanaActual.dia1 ? "white" : "",
@@ -51,12 +77,15 @@ export const useAsistencia = () => {
           }}
           value="fecha1"
           aria-label="bold"
+          variant="outlined"
+          onClick={() => onClickAsistencia(params.row, 1, semana)}
         >
           {params.row.fecha1.split(" ")[0]}
           <br />
           {params.row.fecha1.split(" ").slice(1)}
-        </ToggleButton>
-        <ToggleButton
+        </Button>
+        <Button
+          variant="outlined"
           value="fecha2"
           aria-label="italic"
           style={{
@@ -65,12 +94,13 @@ export const useAsistencia = () => {
             width: 90,
             fontSize: 12,
           }}
+          onClick={() => onClickAsistencia(params.row, 2, semana)}
         >
           {params.row.fecha2.split(" ")[0]}
           <br />
           {params.row.fecha2.split(" ").slice(1)}
-        </ToggleButton>
-      </ToggleButtonGroup>
+        </Button>
+      </>
     );
   };
 
@@ -84,7 +114,7 @@ export const useAsistencia = () => {
       sortable: false,
       filterable: false,
       renderCell: (params: any) => {
-        return renderButtons(params);
+        return renderButtons(params, 1);
       },
     },
     {
@@ -94,7 +124,7 @@ export const useAsistencia = () => {
       sortable: false,
       filterable: false,
       renderCell: (params: any) => {
-        return renderButtons(params);
+        return renderButtons(params, 2);
       },
     },
     {
@@ -104,7 +134,7 @@ export const useAsistencia = () => {
       sortable: false,
       filterable: false,
       renderCell: (params: any) => {
-        return renderButtons(params);
+        return renderButtons(params, 3);
       },
     },
     {
@@ -114,7 +144,7 @@ export const useAsistencia = () => {
       sortable: false,
       filterable: false,
       renderCell: (params: any) => {
-        return renderButtons(params);
+        return renderButtons(params, 4);
       },
     },
   ];
@@ -140,7 +170,7 @@ export const useAsistencia = () => {
     sortable: false,
     filterable: false,
     renderCell: (params: any) => {
-      return renderButtons(params);
+      return renderButtons(params, 5);
     },
   };
 
@@ -160,10 +190,11 @@ export const useAsistencia = () => {
               fecha1: data.alumno.fecha1,
               fecha2: data.alumno.fecha2,
               semana: data.asistencia.semanas,
+              alumnoId: data.alumno._id,
             });
           });
           if (newData[0].semana.length === 5) {
-            const newColumns = semanasDefault;            
+            const newColumns = semanasDefault;
             if (newColumns.length === 6) {
               newColumns.push(semana5);
             }
