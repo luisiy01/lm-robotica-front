@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { User, Mail, Phone, Save, ArrowLeft, ShieldCheck, Calendar, Trash2, Cpu } from 'lucide-react';
+import { User, Mail, Phone, Save, ArrowLeft, Calendar, Trash2, Cpu } from 'lucide-react';
 import './EditarAlumno.css';
 import '../../../NewDashboard.css';
 import { useNavigate } from 'react-router';
 
 export const EditarAlumno = () => {
-    const [formData, setFormData] = useState({
+    const [formData, _setFormData] = useState({
         nombre: 'Mateo García',
         fechaNacimiento: '2015-06-15',
         nivel: 'Advanced',

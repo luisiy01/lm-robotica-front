@@ -9,7 +9,7 @@ import '../../../NewDashboard.css';
 import { useNavigate } from 'react-router';
 
 export const NuevoAlumno = () => {
-    const [formData, setFormData] = useState({
+    const [formData, _setFormData] = useState({
         nombre: '',
         fechaNacimiento: '',
         nivel: 'Basic',
