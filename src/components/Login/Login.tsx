@@ -3,10 +3,12 @@ import { Mail, Lock, Zap, Puzzle } from 'lucide-react';
 import legoLogo from "../../assets/images/lego_logo.png";
 import logoLM from "../../assets/images/logo_lm_robotica.jpg";
 import './Login.css';
+import { useNavigate } from 'react-router';
 
 export const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -79,7 +81,11 @@ export const Login = () => {
                         </div>
 
                         <div className="pt-2">
-                            <button type="submit" className="w-full btn-lm-primary py-3 rounded-xl font-semibold flex items-center justify-center gap-2">
+                            <button
+                                type="submit"
+                                className="w-full btn-lm-primary py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
+                                onClick={() => navigate('/dashboard')}
+                            >
                                 CONECTAR
                                 <Zap size={18} fill="currentColor" />
                             </button>

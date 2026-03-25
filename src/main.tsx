@@ -1,11 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Login } from './components/Login/Login'
-import { NewDashboard } from './components/NewDashboard/NewDashboard'
+import { BrowserRouter } from "react-router";
+import { Mainroutes } from './routes/Mainroutes';
 import './main.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <NewDashboard />
+    <BrowserRouter>
+      <Mainroutes />
+    </BrowserRouter>
   </StrictMode>,
 )
