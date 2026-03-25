@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+
+.badge-nivel {
+    @apply px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider;
+}
+
+.nivel-basic {
+    @apply bg-green-100 text-green-700;
+}
+
+.nivel-inter {
+    @apply bg-blue-100 text-blue-700;
+}
+
+.nivel-advanced {
+    @apply bg-purple-100 text-purple-700;
+}
+
+.avatar-lego {
+    @apply w-10 h-10 rounded-full flex items-center justify-center text-white font-bold border-2 border-white shadow-sm;
+}
+
+.table-row-hover {
+    @apply hover:bg-gray-50 transition-colors cursor-pointer;
+}
+
+/* Animación para la lista */
+.stagger-item {
+    opacity: 0;
+    animation: slideInRight 0.4s ease-out forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
