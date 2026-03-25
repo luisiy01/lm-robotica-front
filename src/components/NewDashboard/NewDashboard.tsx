@@ -13,8 +13,12 @@ import {
 import { Outlet } from "react-router";
 import logoLM from "../../assets/images/logo_lm_robotica.jpg";
 import './NewDashboard.css';
+import { useNavigate } from 'react-router';
 
 export const NewDashboard = () => {
+
+    const navigate = useNavigate();
+
     return (
         <div className="dashboard-container">
 
@@ -48,7 +52,10 @@ export const NewDashboard = () => {
                 </nav>
 
                 <div className="p-4 border-t border-gray-100">
-                    <button className="sidebar-item w-full text-red-500 hover:bg-red-50 hover:text-red-600">
+                    <button
+                        className="sidebar-item w-full text-red-500 hover:bg-red-50 hover:text-red-600"
+                        onClick={() => navigate('/')}
+                    >
                         <LogOut size={20} />
                         <span>Salir</span>
                     </button>

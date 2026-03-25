@@ -88,7 +88,8 @@ export const Alumnos = () => {
                         </thead>
                         <tbody className="divide-y divide-gray-50">
                             {alumnosData.map((alumno, index) => (
-                                <tr key={alumno.id} className="table-row-hover stagger-item" style={{ animationDelay: `${index * 0.1}s` }}>
+                                <tr key={alumno.id} className="table-row-hover stagger-item" style={{ animationDelay: `${index * 0.1}s` }}
+                                    onClick={() => navigate(`/dashboard/alumnos/editar/${alumno.id}`)}>
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                             <div className={`avatar-lego ${alumno.color}`}>
