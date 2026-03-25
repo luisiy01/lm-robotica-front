@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/* Dashboard.css */
+
+/* Contenedor principal con scroll suave */
+.dashboard-container {
+    @apply flex h-screen bg-gray-50 overflow-hidden font-sans;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    @apply w-64 bg-white border-r border-gray-200 flex flex-col transition-all duration-300;
+}
+
+.sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-gray-500 hover:bg-sky-50 hover:text-sky-600 cursor-pointer font-medium;
+}
+
+.sidebar-item-active {
+    @apply bg-[#0EA5E9] text-white shadow-lg shadow-sky-500/30 hover:bg-[#0284C7] hover:text-white;
+}
+
+/* Cards de Estadísticas */
+.stat-card {
+    @apply bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1;
+}
+
+/* Estilo de Barras de Progreso "LEGO Style" */
+.progress-container {
+    @apply h-2 w-full bg-gray-100 rounded-full overflow-hidden;
+}
+
+.progress-bar-fill {
+    @apply h-full transition-all duration-1000 ease-out;
+}
+
+/* Animaciones de entrada escalonadas */
+.animate-fade-up {
+    opacity: 0;
+    animation: fadeUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Delay para las tarjetas */
+.delay-1 {
+    animation-delay: 0.1s;
+}
+
+.delay-2 {
+    animation-delay: 0.2s;
+}
+
+.delay-3 {
+    animation-delay: 0.3s;
+}
