@@ -1,75 +1,68 @@
-# React + TypeScript + Vite
+# LM Robótica - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación de gestión frontend para LM Robótica, desarrollada con **React 19**, **TypeScript** y empaquetada con **Vite**. La aplicación cuenta con módulos enfocados en la administración de alumnos, control de asistencias, visualización de dashboard y gestión de pagos.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologías y Herramientas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Framework principal:** [React 19](https://react.dev/)
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **Gestión de UI:** 
+  - [Material-UI (MUI)](https://mui.com/) y Data Grid
+  - [Tailwind CSS v4](https://tailwindcss.com/)
+- **Estado global:** [Zustand](https://github.com/pmndrs/zustand)
+- **Formularios y Validación:** [Formik](https://formik.org/) y [Yup](https://github.com/jquense/yup)
+- **Peticiones HTTP:** [Axios](https://axios-http.com/)
+- **Iconografía:** [Lucide React](https://lucide.dev/) y MUI Icons
+- **Notificaciones:** [React Toastify](https://fkhadra.github.io/react-toastify/)
+- **Exportación de datos:** react-csv-downloader
 
-## React Compiler
+## 📁 Estructura Principal del Proyecto
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+El código fuente de la aplicación se encuentra alojado principalmente en la carpeta `/src`. Los módulos más importantes de la interfaz están estructurados dentro de `/src/components`:
 
-Note: This will impact Vite dev & build performances.
+- `/Alumnos`: Componentes y vistas para la gestión y registro de alumnos.
+- `/Asistencia`: Módulo encargado del control de asistencia.
+- `/Dashboard`: Panel principal de visualización de métricas y acceso rápido.
+- `/Login`: Interfaz para la autenticación de usuarios al sistema.
+- `/Pagos`: Administración, validación y registro de pagos.
+- `/common`: Componentes reutilizables compartidos a través de la aplicación.
+- `/store`: Definición de estados globales y lógica conectada usando Zustand.
+- `/services` y `/lib`: Manejo de las interacciones con APIs y librerías o utilidades adicionales.
 
-## Expanding the ESLint configuration
+## 💻 Instalación y Uso Local
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Asegúrate de tener instalado [Node.js](https://nodejs.org/) (se recomienda la última versión LTS).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Clonar el repositorio y acceder a la carpeta:**
+   ```bash
+   git clone <URL_DEL_REPOSITORIO>
+   cd lm-robotica-front
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. **Instalar dependencias:**
+   ```bash
+   npm install
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3. **Variables de entorno:**
+   Consulta el archivo `.env copy` para configurar las variables requeridas en un archivo local `.env`.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+4. **Levantar servidor de desarrollo:**
+   ```bash
+   npm run dev
+   ```
+   *El proyecto levantará en modo desarrollo, normalmente en el puerto configurado por Vite (ej: http://localhost:5173).*
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📜 Scripts Disponibles
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+En el directorio del proyecto puedes ejecutar:
+
+- `npm run dev`: Ejecuta la app en modo de desarrollo con HMR (Hot Module Replacement).
+- `npm run build`: Ejecuta el verificador de tipos (TypeScript) y empaqueta la aplicación para producción en la carpeta `dist`.
+- `npm run lint`: Ejecuta el linter (ESLint) en busca de problemas o malas prácticas en el código fuente.
+- `npm run preview`: Previsualiza localmente el build de producción que ha sido generado.
+
+## ⚙️ Reglas de Código (Linting & TypeScript)
+
+El proyecto incluye configuraciones robustas tanto para **TypeScript** (`tsconfig.app.json` / `tsconfig.node.json`) como para **ESLint** (con reglas recomendadas y específicas para React Hooks y Fast Refresh). Cuando contribuyas, asegúrate de mantener el código limpio corriendo `npm run lint` antes de crear un PR o hacer commit.
