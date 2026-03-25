@@ -1,14 +1,17 @@
 @import "tailwindcss";
 
-/* Patrón de fondo estilo 'Studs' de LEGO */
+/* Login.css */
+
 .bg-lego-pattern {
     background-color: #f9fafb;
     background-image: radial-gradient(#e5e7eb 2px, transparent 2px);
     background-size: 30px 30px;
     background-position: 0 0, 15px 15px;
+    /* Evita que el patrón o sus hijos generen scroll innecesario */
+    overflow: hidden;
 }
 
-/* Animaciones de entrada (requiere tener configurado tailwind-animate o usarlas así) */
+/* Animación de entrada */
 @keyframes fadeInZoom {
     from {
         opacity: 0;
@@ -25,7 +28,7 @@
     animation: fadeInZoom 0.5s ease-out forwards;
 }
 
-/* Clases utilitarias personalizadas para los colores de LM Robótica */
+/* Clases utilitarias personalizadas */
 .btn-lm-primary {
     @apply bg-[#0EA5E9] hover:bg-[#0284C7] text-white transition-all duration-200 active:scale-[0.98] shadow-lg shadow-sky-500/20;
 }
