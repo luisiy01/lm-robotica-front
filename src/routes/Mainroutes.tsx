@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router";
-import { Login } from "../components/Login/Login";
-import { NewDashboard } from "../components/NewDashboard/NewDashboard";
-import { Alumnos } from "../components/NewDashboard/components/Alumnos/Alumnos";
-import { NuevoAlumno } from "../components/NewDashboard/components/Alumnos/NuevoAlumno/NuevoAlumno";
-import { EditarAlumno } from "../components/NewDashboard/components/Alumnos/EditarAlumno/EditarAlumno";
+import { Login } from "@components/Login/Login";
+import { NewDashboard } from "@components/NewDashboard/NewDashboard";
+import { Alumnos } from "@components/NewDashboard/components/Alumnos/Alumnos";
+import { NuevoAlumno } from "@components/NewDashboard/components/Alumnos/NuevoAlumno/NuevoAlumno";
+import { EditarAlumno } from "@components/NewDashboard/components/Alumnos/EditarAlumno/EditarAlumno";
 
 export const Mainroutes = () => {
     return (

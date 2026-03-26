@@ -1,36 +1,49 @@
-import { useState } from 'react';
-import { Mail, Lock, Zap, Puzzle } from 'lucide-react';
+import { Mail, Lock, Zap, Puzzle, AlertCircle } from 'lucide-react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router';
 import legoLogo from "../../assets/images/lego_logo.png";
 import logoLM from "../../assets/images/logo_lm_robotica.jpg";
 import './Login.css';
-import { useNavigate } from 'react-router';
 
 export const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log('Datos enviados:', { email, password });
-    };
+    // Esquema de validación con Yup
+    const validationSchema = Yup.object({
+        email: Yup.string()
+            .email('Introduce un correo electrónico válido')
+            .required('El correo es obligatorio'),
+        password: Yup.string()
+            .min(6, 'La contraseña debe tener al menos 6 caracteres')
+            .required('La contraseña es obligatoria'),
+    });
+
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log('Datos enviados:', values);
+            navigate('/dashboard');
+        },
+    });
 
     return (
-        /* Cambiado a h-screen y overflow-hidden para asegurar que no haya doble scroll */
         <div className="bg-lego-pattern h-screen w-full flex items-center justify-center p-4 relative overflow-hidden font-sans">
 
-            {/* PIEZAS DE FONDO - Con z-0 para no interferir */}
+            {/* PIEZAS DE FONDO */}
             <div className="absolute -top-10 -left-10 w-32 h-32 sm:w-48 sm:h-48 opacity-30 blur-md rotate-12 pointer-events-none lg:opacity-40 lg:blur-sm z-0">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/Lego_Color_Bricks.jpg" alt="Ladrillos" className="w-full h-full object-contain" />
             </div>
-
             <div className="absolute -bottom-10 -right-10 w-40 h-40 sm:w-64 sm:h-64 opacity-30 blur-md -rotate-12 pointer-events-none lg:opacity-40 lg:blur-sm z-0">
                 <img src={legoLogo} alt="LEGO Logo" className="w-full h-full object-contain" />
             </div>
 
-            {/* CARD PRINCIPAL - z-10 para estar sobre las piezas */}
+            {/* CARD PRINCIPAL */}
             <div className="w-full max-w-[95%] sm:max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl shadow-gray-300/50 relative z-10 overflow-hidden border border-gray-100 animate-login-card">
-
                 <div className="h-2 w-full bg-[#F4D03F]"></div>
 
                 <div className="p-6 sm:p-8 md:p-10">
@@ -42,49 +55,70 @@ export const Login = () => {
                         </h1>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                    <form onSubmit={formik.handleSubmit} className="space-y-4 sm:space-y-5">
+                        {/* Campo Email */}
                         <div className="space-y-1">
                             <label className="text-xs sm:text-sm font-medium text-gray-700">Correo Electrónico</label>
                             <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none text-gray-400">
+                                <div className={`absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none 
+                                    ${formik.touched.email && formik.errors.email ? 'text-red-400' : 'text-gray-400'}`}>
                                     <Mail size={18} />
                                 </div>
                                 <input
+                                    id="email"
+                                    name="email"
                                     type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    className="input-lm"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.email}
+                                    className={`input-lm ${formik.touched.email && formik.errors.email ? 'border-red-500 focus:ring-red-200' : ''}`}
                                     placeholder="tu.correo@robotica.com"
                                 />
                             </div>
+                            {formik.touched.email && formik.errors.email && (
+                                <p className="text-red-500 text-[10px] sm:text-xs flex items-center gap-1 mt-1 font-medium">
+                                    <AlertCircle size={12} /> {formik.errors.email}
+                                </p>
+                            )}
                         </div>
 
+                        {/* Campo Contraseña */}
                         <div className="space-y-1">
                             <div className="flex items-center justify-between">
                                 <label className="text-xs sm:text-sm font-medium text-gray-700">Contraseña</label>
                                 <button type="button" className="text-[10px] sm:text-xs font-medium text-[#0284C7] hover:underline">¿Olvidaste?</button>
                             </div>
                             <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none text-gray-400">
+                                <div className={`absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none 
+                                    ${formik.touched.password && formik.errors.password ? 'text-red-400' : 'text-gray-400'}`}>
                                     <Lock size={18} />
                                 </div>
                                 <input
+                                    id="password"
+                                    name="password"
                                     type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    className="input-lm"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.password}
+                                    className={`input-lm ${formik.touched.password && formik.errors.password ? 'border-red-500 focus:ring-red-200' : ''}`}
                                     placeholder="••••••••"
                                 />
                             </div>
+                            {formik.touched.password && formik.errors.password && (
+                                <p className="text-red-500 text-[10px] sm:text-xs flex items-center gap-1 mt-1 font-medium">
+                                    <AlertCircle size={12} /> {formik.errors.password}
+                                </p>
+                            )}
                         </div>
 
                         <div className="pt-2">
                             <button
                                 type="submit"
-                                className="w-full btn-lm-primary py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
-                                onClick={() => navigate('/dashboard')}
+                                disabled={!formik.isValid || !formik.dirty}
+                                className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 
+                                    ${(!formik.isValid || !formik.dirty)
+                                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                        : 'btn-lm-primary text-white active:scale-[0.98]'}`}
                             >
                                 CONECTAR
                                 <Zap size={18} fill="currentColor" />
