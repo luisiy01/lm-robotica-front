@@ -1,39 +1,14 @@
 import { Mail, Lock, Zap, Puzzle, AlertCircle } from 'lucide-react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useNavigate } from 'react-router';
-import legoLogo from "../../assets/images/lego_logo.png";
-import logoLM from "../../assets/images/logo_lm_robotica.jpg";
+import legoLogo from "@assets/images/lego_logo.png";
+import logoLM from "@assets/images/logo_lm_robotica.jpg";
 import './Login.css';
+import { useLogin } from './hooks/useLogin';
 
 export const Login = () => {
-    const navigate = useNavigate();
-
-    // Esquema de validación con Yup
-    const validationSchema = Yup.object({
-        email: Yup.string()
-            .email('Introduce un correo electrónico válido')
-            .required('El correo es obligatorio'),
-        password: Yup.string()
-            .min(6, 'La contraseña debe tener al menos 6 caracteres')
-            .required('La contraseña es obligatoria'),
-    });
-
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log('Datos enviados:', values);
-            navigate('/dashboard');
-        },
-    });
+    const { formik, isValid } = useLogin();
 
     return (
         <div className="bg-lego-pattern h-screen w-full flex items-center justify-center p-4 relative overflow-hidden font-sans">
-
             {/* PIEZAS DE FONDO */}
             <div className="absolute -top-10 -left-10 w-32 h-32 sm:w-48 sm:h-48 opacity-30 blur-md rotate-12 pointer-events-none lg:opacity-40 lg:blur-sm z-0">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/Lego_Color_Bricks.jpg" alt="Ladrillos" className="w-full h-full object-contain" />
@@ -42,7 +17,6 @@ export const Login = () => {
                 <img src={legoLogo} alt="LEGO Logo" className="w-full h-full object-contain" />
             </div>
 
-            {/* CARD PRINCIPAL */}
             <div className="w-full max-w-[95%] sm:max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl shadow-gray-300/50 relative z-10 overflow-hidden border border-gray-100 animate-login-card">
                 <div className="h-2 w-full bg-[#F4D03F]"></div>
 
@@ -60,23 +34,18 @@ export const Login = () => {
                         <div className="space-y-1">
                             <label className="text-xs sm:text-sm font-medium text-gray-700">Correo Electrónico</label>
                             <div className="relative">
-                                <div className={`absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none 
-                                    ${formik.touched.email && formik.errors.email ? 'text-red-400' : 'text-gray-400'}`}>
+                                <div className={`absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none ${formik.touched.email && formik.errors.email ? 'text-red-400' : 'text-gray-400'}`}>
                                     <Mail size={18} />
                                 </div>
                                 <input
-                                    id="email"
-                                    name="email"
+                                    {...formik.getFieldProps('email')}
                                     type="email"
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    value={formik.values.email}
                                     className={`input-lm ${formik.touched.email && formik.errors.email ? 'border-red-500 focus:ring-red-200' : ''}`}
                                     placeholder="tu.correo@robotica.com"
                                 />
                             </div>
                             {formik.touched.email && formik.errors.email && (
-                                <p className="text-red-500 text-[10px] sm:text-xs flex items-center gap-1 mt-1 font-medium">
+                                <p className="text-red-500 text-[10px] sm:text-xs flex items-center gap-1 mt-1 font-medium italic">
                                     <AlertCircle size={12} /> {formik.errors.email}
                                 </p>
                             )}
@@ -89,23 +58,18 @@ export const Login = () => {
                                 <button type="button" className="text-[10px] sm:text-xs font-medium text-[#0284C7] hover:underline">¿Olvidaste?</button>
                             </div>
                             <div className="relative">
-                                <div className={`absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none 
-                                    ${formik.touched.password && formik.errors.password ? 'text-red-400' : 'text-gray-400'}`}>
+                                <div className={`absolute inset-y-0 left-0 pl-3 sm:pl-4 flex items-center pointer-events-none ${formik.touched.password && formik.errors.password ? 'text-red-400' : 'text-gray-400'}`}>
                                     <Lock size={18} />
                                 </div>
                                 <input
-                                    id="password"
-                                    name="password"
+                                    {...formik.getFieldProps('password')}
                                     type="password"
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    value={formik.values.password}
                                     className={`input-lm ${formik.touched.password && formik.errors.password ? 'border-red-500 focus:ring-red-200' : ''}`}
                                     placeholder="••••••••"
                                 />
                             </div>
                             {formik.touched.password && formik.errors.password && (
-                                <p className="text-red-500 text-[10px] sm:text-xs flex items-center gap-1 mt-1 font-medium">
+                                <p className="text-red-500 text-[10px] sm:text-xs flex items-center gap-1 mt-1 font-medium italic">
                                     <AlertCircle size={12} /> {formik.errors.password}
                                 </p>
                             )}
@@ -114,11 +78,9 @@ export const Login = () => {
                         <div className="pt-2">
                             <button
                                 type="submit"
-                                disabled={!formik.isValid || !formik.dirty}
+                                disabled={!isValid}
                                 className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 
-                                    ${(!formik.isValid || !formik.dirty)
-                                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                        : 'btn-lm-primary text-white active:scale-[0.98]'}`}
+                                    ${!isValid ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'btn-lm-primary text-white active:scale-[0.98]'}`}
                             >
                                 CONECTAR
                                 <Zap size={18} fill="currentColor" />
@@ -126,16 +88,8 @@ export const Login = () => {
                         </div>
                     </form>
 
-                    <div className="relative my-6">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-100"></div>
-                        </div>
-                        <div className="relative flex justify-center text-[10px] uppercase tracking-widest text-gray-400 font-bold">
-                            <span className="bg-white px-4">Workspace</span>
-                        </div>
-                    </div>
-
-                    <div className="text-center">
+                    {/* FOOTER RRSS */}
+                    <div className="text-center mt-8">
                         <a href="https://www.instagram.com/lm_robotica/" target="_blank" rel="noreferrer" className="text-[10px] sm:text-xs text-gray-400 hover:text-[#0EA5E9] transition-colors font-medium">
                             @lm_robotica
                         </a>
