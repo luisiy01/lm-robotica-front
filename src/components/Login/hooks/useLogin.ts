@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 export const useLogin = () => {
     const navigate = useNavigate();
@@ -22,9 +23,15 @@ export const useLogin = () => {
         },
         validationSchema,
         onSubmit: (values) => {
-            console.log('Iniciando sesión para:', values.email);
-            // Simulación de login exitoso
-            navigate('/dashboard');
+
+            toast.success('¡Bienvenido a la Innovación!', {
+                description: `Hola ${values.email.split('@')[0]}, conectando con LM Robótica...`,
+                duration: 3000,
+            });
+
+            setTimeout(() => {
+                navigate('/dashboard');
+            }, 1500);
         },
     });
 

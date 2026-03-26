@@ -2,6 +2,7 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 export const useNuevoAlumno = () => {
     const navigate = useNavigate();
@@ -35,9 +36,14 @@ export const useNuevoAlumno = () => {
         },
         validationSchema,
         onSubmit: (values) => {
-            console.log("Enviando datos del nuevo alumno:", values);
-            alert("¡Alumno inscrito con éxito!");
-            navigate('/dashboard/alumnos');
+            toast.success('¡Inscripción Exitosa!', {
+                description: `${values.nombre} ha sido ensamblado correctamente en el sistema.`,
+                duration: 4000,
+            });
+
+            setTimeout(() => {
+                navigate('/dashboard/alumnos');
+            }, 1000);
         }
     });
 

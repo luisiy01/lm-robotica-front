@@ -14,11 +14,10 @@ export const EditarAlumno = () => {
         alergias: 'Ninguna'
     };
 
-    const { formik, navigate, isValid } = useEditarAlumno(datosAlumnoActual);
+    const { formik, navigate, isValid, confirmDelete } = useEditarAlumno(datosAlumnoActual);
 
     return (
         <div className="p-6 lg:p-10 max-w-4xl mx-auto space-y-8 font-sans">
-
             {/* ENCABEZADO */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
@@ -38,7 +37,7 @@ export const EditarAlumno = () => {
                 <button
                     type="button"
                     className="flex items-center justify-center gap-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-xl font-bold transition-all text-sm"
-                    onClick={() => { if (window.confirm('¿Eliminar registro?')) console.log('Baja confirmada'); }}
+                    onClick={confirmDelete}
                 >
                     <Trash2 size={18} />
                     Dar de Baja

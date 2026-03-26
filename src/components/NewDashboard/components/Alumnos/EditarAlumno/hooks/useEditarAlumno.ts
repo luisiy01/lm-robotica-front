@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 interface EditarAlumnoFormValues {
     nombre: string;
@@ -44,16 +45,40 @@ export const useEditarAlumno = (alumnoInicial: any) => {
         enableReinitialize: true, // Permite que el formulario se actualice si los datos externos cambian
         validationSchema,
         onSubmit: (values) => {
-            console.log("Actualizando datos del alumno:", values);
-            alert("¡Ingeniero actualizado correctamente!");
-            navigate('/dashboard/alumnos');
+            toast.success('¡Ingeniero actualizado!', {
+                description: `Los cambios de ${values.nombre} se guardaron correctamente.`,
+            });
+
+            setTimeout(() => {
+                navigate('/dashboard/alumnos');
+            }, 1000);
         }
     });
+
+    const confirmDelete = () => {
+        toast.error('¿Eliminar alumno?', {
+            description: 'Esta acción dará de baja al ingeniero permanentemente.',
+            action: {
+                label: 'Eliminar',
+                onClick: () => {
+                    // Aquí iría tu lógica de borrado real
+                    toast.success('Alumno eliminado del sistema');
+                    navigate('/dashboard/alumnos');
+                },
+            },
+            cancel: {
+                label: 'Cancelar',
+                onClick: () => console.log('Eliminación cancelada')
+            },
+            duration: 10000, // Dar tiempo para decidir
+        });
+    };
 
     return {
         formik,
         navigate,
         isValid: formik.isValid && formik.dirty,
-        isSubmitting: formik.isSubmitting
+        isSubmitting: formik.isSubmitting,
+        confirmDelete
     };
 };
