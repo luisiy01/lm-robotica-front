@@ -1,10 +1,9 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router';
-import { toast } from 'sonner';
+import { useAuthMutation } from './useAuthMutation';
 
 export const useLogin = () => {
-    const navigate = useNavigate();
+    const { mutate, isPending } = useAuthMutation();
 
     // Esquema de validación con Yup
     const validationSchema = Yup.object({
@@ -12,7 +11,7 @@ export const useLogin = () => {
             .email('Introduce un correo electrónico válido')
             .required('El correo es obligatorio'),
         password: Yup.string()
-            .min(6, 'La contraseña debe tener al menos 6 caracteres')
+            .min(5, 'La contraseña debe tener al menos 5 caracteres')
             .required('La contraseña es obligatoria'),
     });
 
@@ -24,14 +23,9 @@ export const useLogin = () => {
         validationSchema,
         onSubmit: (values) => {
 
-            toast.success('¡Bienvenido a la Innovación!', {
-                description: `Hola ${values.email.split('@')[0]}, conectando con LM Robótica...`,
-                duration: 3000,
-            });
+            mutate(values);
 
-            setTimeout(() => {
-                navigate('/dashboard');
-            }, 1500);
+
         },
     });
 
@@ -39,6 +33,7 @@ export const useLogin = () => {
     return {
         formik,
         isValid: formik.isValid && formik.dirty,
-        isSubmitting: formik.isSubmitting
+        isSubmitting: formik.isSubmitting,
+        isLoading: isPending
     };
 };

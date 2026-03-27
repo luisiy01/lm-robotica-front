@@ -1,11 +1,11 @@
-import { Mail, Lock, Zap, Puzzle, AlertCircle } from 'lucide-react';
+import { Mail, Lock, Zap, Puzzle, AlertCircle, Loader2 } from 'lucide-react';
 import legoLogo from "@assets/images/lego_logo.png";
 import logoLM from "@assets/images/logo_lm_robotica.jpg";
 import './Login.css';
 import { useLogin } from './hooks/useLogin';
 
 export const Login = () => {
-    const { formik, isValid } = useLogin();
+    const { formik, isValid, isLoading } = useLogin();
 
     return (
         <div className="bg-lego-pattern h-screen w-full flex items-center justify-center p-4 relative overflow-hidden font-sans">
@@ -78,12 +78,21 @@ export const Login = () => {
                         <div className="pt-2">
                             <button
                                 type="submit"
-                                disabled={!isValid}
+                                disabled={!isValid || isLoading}
                                 className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 
-                                    ${!isValid ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'btn-lm-primary text-white active:scale-[0.98]'}`}
+                                    ${!isValid || isLoading ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'btn-lm-primary text-white active:scale-[0.98]'}`}
                             >
-                                CONECTAR
-                                <Zap size={18} fill="currentColor" />
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 size={18} className="animate-spin" />
+                                        AUTENTICANDO...
+                                    </>
+                                ) : (
+                                    <>
+                                        CONECTAR
+                                        <Zap size={18} fill="currentColor" />
+                                    </>
+                                )}
                             </button>
                         </div>
                     </form>
