@@ -9,12 +9,9 @@ import {
 import { Outlet } from "react-router";
 import logoLM from "../../assets/images/logo_lm_robotica.jpg";
 import './NewDashboard.css';
-import { useNavigate } from 'react-router';
 import { useLogout } from './hooks/useLogout';
 
 export const NewDashboard = () => {
-
-    const navigate = useNavigate();
     const { logout } = useLogout();
 
     return (
