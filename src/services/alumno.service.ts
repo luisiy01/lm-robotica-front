@@ -10,6 +10,16 @@ export const getAlumnos = async (): Promise<any> => {
   }
 };
 
+export const getAlumnoById = async (id: string): Promise<any> => {
+  try {
+    const response = await api.get(`${apiUrl}/alumnos/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener el alumno con ID: ${id}`, error);
+    throw error;
+  }
+};
+
 export const addAlumno = async (postData: any): Promise<any> => {
   try {
     const response = await api.post(`${apiUrl}/alumnos`, postData);

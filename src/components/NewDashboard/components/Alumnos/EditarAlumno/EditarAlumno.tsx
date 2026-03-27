@@ -1,20 +1,23 @@
 // EditarAlumno.tsx
-import { User, Phone, Save, ArrowLeft, Calendar, Trash2, UserCheck, ShieldCheck } from 'lucide-react';
+import { User, Phone, Save, ArrowLeft, Calendar, Trash2, UserCheck, ShieldCheck, Loader2 } from 'lucide-react';
 import './EditarAlumno.css';
 import '../../../NewDashboard.css';
 import { useEditarAlumno } from './hooks/useEditarAlumno';
+import { useParams } from 'react-router';
 
 export const EditarAlumno = () => {
-    // Datos simulados actualizados (nombreTutor en lugar de emailTutor)
-    const datosAlumnoActual = {
-        nombre: 'Mateo García',
-        fechaNacimiento: '2015-06-15',
-        nombreTutor: 'Juan García',
-        telefono: '3121234567',
-        alergias: 'Ninguna'
-    };
+    const { id } = useParams();
 
-    const { formik, navigate, isValid, confirmDelete } = useEditarAlumno(datosAlumnoActual);
+    const { formik, navigate, isValid, confirmDelete, isLoadingData, isUpdating } = useEditarAlumno(id!);
+
+    if (isLoadingData) {
+        return (
+            <div className="flex h-screen items-center justify-center">
+                <Loader2 className="animate-spin text-sky-500" size={48} />
+                <span className="ml-3 text-gray-500 font-medium">Cargando expediente...</span>
+            </div>
+        );
+    }
 
     return (
         <div className="p-6 lg:p-10 max-w-4xl mx-auto space-y-8 font-sans animate-fade-up">
@@ -30,7 +33,7 @@ export const EditarAlumno = () => {
                     </button>
                     <div>
                         <h2 className="text-2xl font-bold text-gray-800 text-center sm:text-left">Editar Ingeniero</h2>
-                        <p className="text-gray-500 text-sm italic">Actualizando perfil de {datosAlumnoActual.nombre}</p>
+                        <p className="text-gray-500 text-sm italic">Actualizando perfil de {formik.values.nombre}</p>
                     </div>
                 </div>
 
@@ -59,7 +62,11 @@ export const EditarAlumno = () => {
                             <label className="text-sm font-semibold text-gray-600">Nombre Completo</label>
                             <div className="relative">
                                 <User className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 ${formik.touched.nombre && formik.errors.nombre ? 'text-red-400' : 'text-gray-300'}`} size={18} />
-                                <input {...formik.getFieldProps('nombre')} type="text" className="form-input !pl-12" />
+                                <input
+                                    {...formik.getFieldProps('nombre')}
+                                    disabled={isUpdating}
+                                    className="form-input !pl-12"
+                                />
                             </div>
                         </div>
 
@@ -67,7 +74,7 @@ export const EditarAlumno = () => {
                             <label className="text-sm font-semibold text-gray-600">Fecha de Nacimiento</label>
                             <div className="relative">
                                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-gray-300" size={18} />
-                                <input {...formik.getFieldProps('fechaNacimiento')} type="date" className="form-input !pl-12" />
+                                <input {...formik.getFieldProps('fechaNacimiento')} disabled={isUpdating} type="date" className="form-input !pl-12" />
                             </div>
                         </div>
                     </div>
@@ -87,7 +94,7 @@ export const EditarAlumno = () => {
                             <label className="text-sm font-semibold text-gray-600">Nombre del Tutor</label>
                             <div className="relative">
                                 <UserCheck className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 ${formik.touched.nombreTutor && formik.errors.nombreTutor ? 'text-red-400' : 'text-gray-300'}`} size={18} />
-                                <input {...formik.getFieldProps('nombreTutor')} type="text" className="form-input !pl-12" />
+                                <input {...formik.getFieldProps('nombreTutor')} disabled={isUpdating} type="text" className="form-input !pl-12" />
                             </div>
                         </div>
 
@@ -95,7 +102,7 @@ export const EditarAlumno = () => {
                             <label className="text-sm font-semibold text-gray-600">Teléfono de Emergencia</label>
                             <div className="relative">
                                 <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 ${formik.touched.telefono && formik.errors.telefono ? 'text-red-400' : 'text-gray-300'}`} size={18} />
-                                <input {...formik.getFieldProps('telefono')} type="tel" className="form-input !pl-12" />
+                                <input {...formik.getFieldProps('telefono')} disabled={isUpdating} type="tel" className="form-input !pl-12" />
                             </div>
                         </div>
                     </div>
@@ -111,7 +118,7 @@ export const EditarAlumno = () => {
                     </div>
                     <div className="relative">
                         <ShieldCheck className="absolute left-4 top-4 text-gray-300 z-10" size={18} />
-                        <textarea {...formik.getFieldProps('alergias')} className="form-input !pl-12 min-h-[100px] pt-3"></textarea>
+                        <textarea {...formik.getFieldProps('alergias')} disabled={isUpdating} className="form-input !pl-12 min-h-[100px] pt-3"></textarea>
                     </div>
                 </section>
 
@@ -119,11 +126,12 @@ export const EditarAlumno = () => {
                 <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-100">
                     <button
                         type="submit"
-                        disabled={!isValid}
-                        className={`flex-1 font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg 
-                            ${!isValid ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-sky-500 text-white hover:bg-sky-600 shadow-sky-500/20'}`}
+                        disabled={!isValid || isUpdating}
+                        className={`flex-1 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg 
+                            ${!isValid || isUpdating ? 'bg-gray-200 text-gray-400' : 'bg-sky-500 text-white shadow-sky-500/25'}`}
                     >
-                        <Save size={20} /> Guardar Cambios
+                        {isUpdating ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
+                        {isUpdating ? 'GUARDANDO...' : 'GUARDAR CAMBIOS'}
                     </button>
                     <button
                         type="button"

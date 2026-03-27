@@ -5,28 +5,23 @@ import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-const initialAlumnosData = [
-    { id: 1, nombre: "Mateo García", email: "mateo.g@email.com", nivel: "Advanced", proyectos: 12, asistencia: "95%", color: "bg-blue-500" },
-    { id: 2, nombre: "Valentina Luna", email: "val.luna@email.com", nivel: "Intermediate", proyectos: 8, asistencia: "88%", color: "bg-yellow-500" },
-    { id: 3, nombre: "Santiago Ruiz", email: "santi.robot@email.com", nivel: "Basic", proyectos: 3, asistencia: "100%", color: "bg-green-500" },
-    { id: 4, nombre: "Lucía Fernández", email: "lucia.f@email.com", nivel: "Advanced", proyectos: 15, asistencia: "92%", color: "bg-purple-500" },
-    { id: 5, nombre: "Thiago Pérez", email: "thiago.p@email.com", nivel: "Intermediate", proyectos: 7, asistencia: "80%", color: "bg-orange-500" },
-];
-
-export const useAlumnos = () => {
+export const useAlumnos = (alumnos: any[] = []) => {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [nivelFilter, setNivelFilter] = useState('Todos');
 
     const filteredAlumnos = useMemo(() => {
-        return initialAlumnosData.filter((alumno) => {
-            const matchesSearch =
-                alumno.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                alumno.email.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesNivel = nivelFilter === 'Todos' || alumno.nivel === nivelFilter;
-            return matchesSearch && matchesNivel;
-        });
-    }, [searchTerm, nivelFilter]);
+        // Si no hay alumnos (aún cargando o error), devolvemos vacío
+        if (!alumnos) return [];
+
+        // Si no hay término de búsqueda, devolvemos la lista completa
+        if (!searchTerm.trim()) return alumnos;
+
+        // Filtrado por nombre
+        return alumnos.filter(alumno =>
+            alumno.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [searchTerm, alumnos]);
 
     // Función para exportar a EXCEL
     const exportToExcel = () => {

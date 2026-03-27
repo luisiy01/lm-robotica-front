@@ -3,6 +3,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getAlumnoById, updateAlumno } from '../../../../../../services/alumno.service';
 
 interface EditarAlumnoFormValues {
     nombre: string;
@@ -12,8 +14,26 @@ interface EditarAlumnoFormValues {
     alergias: string;
 }
 
-export const useEditarAlumno = (alumnoInicial: any) => {
+export const useEditarAlumno = (id: string) => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    const { data: alumno, isLoading: isLoadingData } = useQuery({
+        queryKey: ['alumno', id],
+        queryFn: () => getAlumnoById(id),
+        enabled: !!id, // Solo se ejecuta si hay un ID
+    });
+
+    const { mutate: editMutate, isPending: isUpdating } = useMutation({
+        mutationFn: (values: any) => updateAlumno(id, values),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['alumnos'] });
+            queryClient.invalidateQueries({ queryKey: ['alumno', id] });
+            toast.success('Cambios guardados correctamente');
+            navigate('/dashboard/alumnos');
+        },
+        onError: () => toast.error('Error al actualizar el perfil')
+    });
 
     const validationSchema = Yup.object({
         nombre: Yup.string()
@@ -33,22 +53,16 @@ export const useEditarAlumno = (alumnoInicial: any) => {
 
     const formik = useFormik<EditarAlumnoFormValues>({
         initialValues: {
-            nombre: alumnoInicial.nombre || '',
-            fechaNacimiento: alumnoInicial.fechaNacimiento || '',
-            nombreTutor: alumnoInicial.nombreTutor || '', // Mapeo actualizado
-            telefono: alumnoInicial.telefono || '',
-            alergias: alumnoInicial.alergias || ''
+            nombre: alumno?.nombre || '',
+            fechaNacimiento: alumno?.fechaNacimiento || '',
+            nombreTutor: alumno?.nombreTutor || '',
+            telefono: alumno?.telefono || '',
+            alergias: alumno?.alergias || ''
         },
         enableReinitialize: true,
         validationSchema,
         onSubmit: (values) => {
-            toast.success('¡Ingeniero actualizado!', {
-                description: `Los cambios de ${values.nombre} se guardaron correctamente.`,
-            });
-
-            setTimeout(() => {
-                navigate('/dashboard/alumnos');
-            }, 1000);
+            editMutate(values);
         }
     });
 
@@ -75,6 +89,8 @@ export const useEditarAlumno = (alumnoInicial: any) => {
         navigate,
         isValid: formik.isValid && formik.dirty,
         isSubmitting: formik.isSubmitting,
-        confirmDelete
+        confirmDelete,
+        isLoadingData,
+        isUpdating,
     };
 };
