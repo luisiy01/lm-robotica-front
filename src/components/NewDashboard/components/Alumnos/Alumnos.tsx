@@ -1,6 +1,7 @@
 // Alumnos.tsx
-import { Users, Search, UserPlus, MoreVertical, FileText, Download } from 'lucide-react';
+import { Users, Search, UserPlus, MoreVertical, FileText, Download, Loader2 } from 'lucide-react';
 import { useAlumnos } from './hooks/useAlumnos';
+import { useAlumnosQueries } from './hooks/queries/useAlumnosQueries';
 import './Alumnos.css';
 
 export const Alumnos = () => {
@@ -10,6 +11,19 @@ export const Alumnos = () => {
         filteredAlumnos, handleEdit,
         handleCreate, exportToExcel, exportToPDF
     } = useAlumnos();
+
+    const { alumnosQuery, deleteAlumno } = useAlumnosQueries();
+    const { data: alumnos, isLoading, isError } = alumnosQuery;
+
+    console.log('alumnos', alumnos)
+
+    if (isLoading) return (
+        <div className="flex h-64 items-center justify-center">
+            <Loader2 className="animate-spin text-sky-500" size={40} />
+        </div>
+    );
+
+    if (isError) return <p className="text-red-500 text-center">Error al cargar ingenieros.</p>;
 
     return (
         <div className="p-6 lg:p-10 space-y-8 animate-fade-up font-sans">
@@ -77,41 +91,26 @@ export const Alumnos = () => {
             {/* TABLA (Mismo código de renderizado que tenías) */}
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        {/* ... table head and body ... */}
-                        <tbody className="divide-y divide-gray-50">
-                            {filteredAlumnos.length > 0 ? (
-                                filteredAlumnos.map((alumno) => (
-                                    <tr key={alumno.id} className="hover:bg-gray-50/80 transition-colors">
-                                        <td className="px-6 py-4 font-bold text-gray-800 text-sm">
-                                            {alumno.nombre}
-                                            <p className="text-[10px] text-gray-400 font-normal">{alumno.email}</p>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className="px-2 py-1 bg-sky-50 text-sky-600 rounded-md text-[10px] font-bold uppercase">
-                                                {alumno.nivel}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-center font-bold text-gray-600 text-sm">
-                                            {alumno.asistencia}
-                                        </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <button
-                                                onClick={() => handleEdit(alumno.id)}
-                                                className="p-2 hover:bg-sky-50 text-gray-400 hover:text-sky-600 rounded-lg"
-                                            >
-                                                <MoreVertical size={18} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={4} className="px-6 py-12 text-center text-gray-400">
-                                        No se encontraron resultados.
+                    <table className="w-full text-left">
+                        <thead className="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th className="p-4 font-semibold text-gray-600">Nombre</th>
+                                <th className="p-4 font-semibold text-gray-600">Tutor</th>
+                                <th className="p-4 font-semibold text-gray-600">Teléfono</th>
+                                <th className="p-4 font-semibold text-gray-600">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {alumnos?.map((alumno: any) => (
+                                <tr key={alumno.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                    <td className="p-4 font-medium text-gray-700">{alumno.nombre}</td>
+                                    <td className="p-4 text-gray-600">{alumno.nombreTutor}</td>
+                                    <td className="p-4 text-gray-600">{alumno.telefono}</td>
+                                    <td className="p-4 flex gap-2">
+                                        <button onClick={() => deleteAlumno(alumno.id)} className="text-red-400 hover:text-red-600">Eliminar</button>
                                     </td>
                                 </tr>
-                            )}
+                            ))}
                         </tbody>
                     </table>
                 </div>
