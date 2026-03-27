@@ -16,7 +16,7 @@ export const useLogout = () => {
         });
 
         // 3. Redirigimos al login de inmediato
-        navigate('/');
+        navigate('/login');
     };
 
     return { logout };
