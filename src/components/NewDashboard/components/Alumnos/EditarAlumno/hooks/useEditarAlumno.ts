@@ -1,3 +1,4 @@
+// hooks/useEditarAlumno.ts
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
@@ -6,8 +7,7 @@ import { toast } from 'sonner';
 interface EditarAlumnoFormValues {
     nombre: string;
     fechaNacimiento: string;
-    nivel: string;
-    emailTutor: string;
+    nombreTutor: string; // Cambiado de emailTutor
     telefono: string;
     alergias: string;
 }
@@ -22,11 +22,9 @@ export const useEditarAlumno = (alumnoInicial: any) => {
         fechaNacimiento: Yup.date()
             .required('La fecha de nacimiento es obligatoria')
             .max(new Date(), 'No puede ser una fecha futura'),
-        nivel: Yup.string()
-            .required('El nivel de robótica es obligatorio'),
-        emailTutor: Yup.string()
-            .email('Introduce un correo válido')
-            .required('El correo es obligatorio'),
+        nombreTutor: Yup.string()
+            .min(3, 'El nombre del tutor es muy corto')
+            .required('El nombre del tutor es obligatorio'),
         telefono: Yup.string()
             .matches(/^[0-9]{10}$/, 'El teléfono debe tener 10 dígitos')
             .required('El teléfono es obligatorio'),
@@ -37,12 +35,11 @@ export const useEditarAlumno = (alumnoInicial: any) => {
         initialValues: {
             nombre: alumnoInicial.nombre || '',
             fechaNacimiento: alumnoInicial.fechaNacimiento || '',
-            nivel: alumnoInicial.nivel || 'Basic',
-            emailTutor: alumnoInicial.emailTutor || '',
+            nombreTutor: alumnoInicial.nombreTutor || '', // Mapeo actualizado
             telefono: alumnoInicial.telefono || '',
             alergias: alumnoInicial.alergias || ''
         },
-        enableReinitialize: true, // Permite que el formulario se actualice si los datos externos cambian
+        enableReinitialize: true,
         validationSchema,
         onSubmit: (values) => {
             toast.success('¡Ingeniero actualizado!', {
@@ -61,7 +58,6 @@ export const useEditarAlumno = (alumnoInicial: any) => {
             action: {
                 label: 'Eliminar',
                 onClick: () => {
-                    // Aquí iría tu lógica de borrado real
                     toast.success('Alumno eliminado del sistema');
                     navigate('/dashboard/alumnos');
                 },
@@ -70,7 +66,7 @@ export const useEditarAlumno = (alumnoInicial: any) => {
                 label: 'Cancelar',
                 onClick: () => console.log('Eliminación cancelada')
             },
-            duration: 10000, // Dar tiempo para decidir
+            duration: 10000,
         });
     };
 
