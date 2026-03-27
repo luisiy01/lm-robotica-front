@@ -1,11 +1,11 @@
 // NuevoAlumno.tsx
-import { Save, ArrowLeft, User, Calendar, Phone, ShieldCheck, AlertCircle, UserCheck } from 'lucide-react';
+import { Save, ArrowLeft, User, Calendar, Phone, ShieldCheck, AlertCircle, UserCheck, Loader2 } from 'lucide-react';
 import './NuevoAlumno.css';
 import '../../../NewDashboard.css';
 import { useNuevoAlumno } from './hooks/useNuevoAlumno';
 
 export const NuevoAlumno = () => {
-    const { formik, navigate, isValid } = useNuevoAlumno();
+    const { formik, navigate, isValid, isLoading } = useNuevoAlumno();
 
     return (
         <div className="p-6 lg:p-10 max-w-4xl mx-auto space-y-8 animate-fade-up">
@@ -106,16 +106,26 @@ export const NuevoAlumno = () => {
                 <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-100">
                     <button
                         type="submit"
-                        disabled={!isValid}
+                        disabled={!isValid || isLoading}
                         className={`flex-1 font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg 
-                            ${!isValid ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-sky-500 text-white hover:bg-sky-600 shadow-sky-500/25'}`}
+                            ${!isValid || isLoading ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-sky-500 text-white hover:bg-sky-600 shadow-sky-500/25'}`}
                     >
-                        <Save size={20} /> Finalizar Inscripción
+                        {isLoading ? (
+                            <>
+                                <Loader2 size={20} className="animate-spin" />
+                                REGISTRANDO...
+                            </>
+                        ) : (
+                            <>
+                                <Save size={20} /> Finalizar Inscripción
+                            </>
+                        )}
                     </button>
                     <button
                         type="button"
                         onClick={() => navigate('/dashboard/alumnos')}
-                        className="px-8 py-4 text-gray-400 font-bold hover:text-gray-600 transition-colors"
+                        disabled={isLoading}
+                        className="px-8 py-4 text-gray-400 font-bold hover:text-gray-600 disabled:opacity-50"
                     >
                         Cancelar
                     </button>

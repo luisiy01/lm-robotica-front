@@ -2,9 +2,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
+import { useAlumnosQueries } from '../../hooks/queries/useAlumnosQueries';
 
 export const useNuevoAlumno = () => {
     const navigate = useNavigate();
+    const { createAlumno, isCreating } = useAlumnosQueries();
 
     const validationSchema = Yup.object({
         nombre: Yup.string()
@@ -33,16 +35,12 @@ export const useNuevoAlumno = () => {
         },
         validationSchema,
         onSubmit: (values) => {
-            console.log("Datos a enviar:", values);
-
-            toast.success('¡Inscripción Exitosa!', {
-                description: `${values.nombre} ha sido registrado en LM Robótica.`,
-                duration: 4000,
+            createAlumno(values, {
+                onSuccess: () => {
+                    // Si el backend responde OK, redirigimos
+                    setTimeout(() => navigate('/dashboard/alumnos'), 1000);
+                }
             });
-
-            setTimeout(() => {
-                navigate('/dashboard/alumnos');
-            }, 1000);
         }
     });
 
@@ -50,6 +48,7 @@ export const useNuevoAlumno = () => {
         formik,
         navigate,
         isValid: formik.isValid && formik.dirty,
-        isSubmitting: formik.isSubmitting
+        isSubmitting: formik.isSubmitting,
+        isLoading: isCreating
     };
 };
