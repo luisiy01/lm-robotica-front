@@ -10,10 +10,12 @@ import { Outlet } from "react-router";
 import logoLM from "../../assets/images/logo_lm_robotica.jpg";
 import './NewDashboard.css';
 import { useNavigate } from 'react-router';
+import { useLogout } from './hooks/useLogout';
 
 export const NewDashboard = () => {
 
     const navigate = useNavigate();
+    const { logout } = useLogout();
 
     return (
         <div className="dashboard-container">
@@ -49,11 +51,13 @@ export const NewDashboard = () => {
 
                 <div className="p-4 border-t border-gray-100">
                     <button
-                        className="sidebar-item w-full text-red-500 hover:bg-red-50 hover:text-red-600"
-                        onClick={() => navigate('/')}
+                        onClick={logout}
+                        className="flex items-center gap-3 w-full px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200 group"
                     >
-                        <LogOut size={20} />
-                        <span>Salir</span>
+                        <div className="p-2 bg-red-100 group-hover:bg-red-200 rounded-lg transition-colors">
+                            <LogOut size={18} />
+                        </div>
+                        <span className="font-bold text-sm">Cerrar Sesión</span>
                     </button>
                 </div>
             </aside>
