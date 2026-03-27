@@ -1,8 +1,8 @@
-// services/api.ts
 import axios from 'axios';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000/api/v2', // URL de tu backend NestJS
+    baseURL: apiUrl, // URL de tu backend NestJS
 });
 
 // INTERCEPTOR DE PETICIONES (Request)
