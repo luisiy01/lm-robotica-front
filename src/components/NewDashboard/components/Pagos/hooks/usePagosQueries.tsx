@@ -1,30 +1,31 @@
-// hooks/queries/usePagosQueries.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-//import api from '../../services/api';
+import * as PagoService from '../../../../../services/pagos.service';
 import { toast } from 'sonner';
 
 export const usePagosQueries = () => {
     const queryClient = useQueryClient();
 
+    // Query para obtener la lista de pagos
     const pagosQuery = useQuery({
         queryKey: ['pagos'],
-        queryFn: async () => {
-            /* const { data } = await api.get('/pagos');
-            return data; */
-            return [] as any[];
+        queryFn: PagoService.getPagos,
+    });
+
+    // Mutación para registrar pago
+    const registrarPagoMutation = useMutation({
+        mutationFn: PagoService.addPago,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['pagos'] });
+            toast.success('Pago registrado exitosamente');
+        },
+        onError: () => {
+            toast.error('Hubo un error al procesar el pago');
         }
     });
 
-    /*  const registrarPago = useMutation({
-         mutationFn: (nuevoPago: any) => api.post('/pagos', nuevoPago),
-         onSuccess: () => {
-             queryClient.invalidateQueries({ queryKey: ['pagos'] });
-             toast.success('Pago registrado correctamente');
-         }
-     }); */
-
     return {
         pagosQuery,
-        //registrarPago 
+        registrarPago: registrarPagoMutation.mutate,
+        isRegistrando: registrarPagoMutation.isPending
     };
 };
