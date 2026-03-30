@@ -1,5 +1,5 @@
 // pages/Pagos/Pagos.tsx
-import { DollarSign, Plus, CheckCircle, Loader2, Search, TrendingUp, AlertCircle } from 'lucide-react';
+import { DollarSign, Plus, Loader2, Search, TrendingUp } from 'lucide-react';
 import { usePagosQueries } from './hooks/usePagosQueries';
 import { usePagos } from './hooks/usePagos'; // Importamos el nuevo hook
 import { useState } from 'react';
@@ -8,7 +8,7 @@ import './Pagos.css';
 
 export const Pagos = () => {
     const { pagosQuery } = usePagosQueries();
-    const { data: pagos, isLoading, isError } = pagosQuery;
+    const { data: pagos, isLoading, } = pagosQuery;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Extraemos la lógica procesada del custom hook

@@ -1,9 +1,9 @@
 // pages/Pagos/components/ModalNuevoPago.tsx
-import { X, DollarSign, User, FileText, Loader2, CheckCircle } from 'lucide-react';
+import { X, DollarSign, User, Loader2, CheckCircle } from 'lucide-react';
 import { useNuevoPago } from '../../hooks/useNuevoPago';
 
 export const ModalNuevoPago = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-    const { formik, alumnos, isLoadingAlumnos, isRegistrando } = useNuevoPago(onClose);
+    const { formik, alumnos, isRegistrando } = useNuevoPago(onClose);
 
     if (!isOpen) return null;
 
