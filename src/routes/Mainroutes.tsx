@@ -5,6 +5,7 @@ import { Alumnos } from "@components/NewDashboard/components/Alumnos/Alumnos";
 import { NuevoAlumno } from "@components/NewDashboard/components/Alumnos/NuevoAlumno/NuevoAlumno";
 import { EditarAlumno } from "@components/NewDashboard/components/Alumnos/EditarAlumno/EditarAlumno";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { Pagos } from "@components/NewDashboard/components/Pagos/Pagos";
 
 export const Mainroutes = () => {
     return (
@@ -16,6 +17,7 @@ export const Mainroutes = () => {
                     <Route path="alumnos" element={<Alumnos />} />
                     <Route path="alumnos/nuevo" element={<NuevoAlumno />} />
                     <Route path="alumnos/editar/:id" element={<EditarAlumno />} />
+                    <Route path="pagos" element={<Pagos />} />
                 </Route>
             </Route>
         </Routes>

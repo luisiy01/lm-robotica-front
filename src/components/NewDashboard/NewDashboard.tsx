@@ -1,3 +1,4 @@
+// NewDashboard.tsx
 import {
     Settings,
     LogOut,
@@ -6,7 +7,7 @@ import {
     DollarSign,
     Users,
 } from 'lucide-react';
-import { Outlet } from "react-router";
+import { Outlet, NavLink } from "react-router"; // Importamos NavLink
 import logoLM from "../../assets/images/logo_lm_robotica.jpg";
 import './NewDashboard.css';
 import { useLogout } from './hooks/useLogout';
@@ -16,7 +17,6 @@ export const NewDashboard = () => {
 
     return (
         <div className="dashboard-container">
-
             {/* SIDEBAR */}
             <aside className="sidebar hidden md:flex">
                 <div className="p-6 flex items-center gap-3">
@@ -28,22 +28,39 @@ export const NewDashboard = () => {
                 </div>
 
                 <nav className="flex-1 px-4 space-y-2 mt-4">
-                    <div className="sidebar-item">
+                    {/* Usamos NavLink con la clase sidebar-item */}
+                    {/* react-router añade automáticamente la clase 'active' si la ruta coincide */}
+                    <NavLink
+                        to="/dashboard/asistencias"
+                        className={({ isActive }) => `sidebar-item ${isActive ? 'sidebar-item-active' : ''}`}
+                    >
                         <Calendar size={20} />
                         <span>Asistencias</span>
-                    </div>
-                    <div className="sidebar-item">
+                    </NavLink>
+
+                    <NavLink
+                        to="/dashboard/pagos"
+                        className={({ isActive }) => `sidebar-item ${isActive ? 'sidebar-item-active' : ''}`}
+                    >
                         <DollarSign size={20} />
                         <span>Pagos</span>
-                    </div>
-                    <div className="sidebar-item sidebar-item-active">
+                    </NavLink>
+
+                    <NavLink
+                        to="/dashboard/alumnos"
+                        className={({ isActive }) => `sidebar-item ${isActive ? 'sidebar-item-active' : ''}`}
+                    >
                         <Users size={20} />
                         <span>Alumnos</span>
-                    </div>
-                    <div className="sidebar-item">
+                    </NavLink>
+
+                    <NavLink
+                        to="/dashboard/configuracion"
+                        className={({ isActive }) => `sidebar-item ${isActive ? 'sidebar-item-active' : ''}`}
+                    >
                         <Settings size={20} />
                         <span>Configuración</span>
-                    </div>
+                    </NavLink>
                 </nav>
 
                 <div className="p-4 border-t border-gray-100">
@@ -61,8 +78,7 @@ export const NewDashboard = () => {
 
             {/* CONTENIDO PRINCIPAL */}
             <main className="flex-1 flex flex-col overflow-y-auto">
-
-                {/* HEADER */}
+                {/* HEADER ... (se mantiene igual) */}
                 <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-10">
                     <div className="relative w-72 lg:w-96" />
                     <div className="flex items-center gap-4">
@@ -80,6 +96,7 @@ export const NewDashboard = () => {
 
                 {/* ÁREA DE TRABAJO */}
                 <div className="p-6 lg:p-10 space-y-8">
+                    {/* Aquí es donde se renderizará Pagos.tsx o Alumnos.tsx */}
                     <Outlet />
                 </div>
             </main>
