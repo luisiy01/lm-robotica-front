@@ -2,11 +2,14 @@
 import { DollarSign, Plus, CheckCircle, Loader2, Search, TrendingUp, AlertCircle } from 'lucide-react';
 import { usePagosQueries } from './hooks/usePagosQueries';
 import { usePagos } from './hooks/usePagos'; // Importamos el nuevo hook
+import { useState } from 'react';
+import { ModalNuevoPago } from './components/ModalNuevoPago/ModalNuevoPago';
 import './Pagos.css';
 
 export const Pagos = () => {
     const { pagosQuery } = usePagosQueries();
     const { data: pagos, isLoading, isError } = pagosQuery;
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Extraemos la lógica procesada del custom hook
     const { searchTerm, setSearchTerm, filteredPagos, stats } = usePagos(pagos);
@@ -28,7 +31,10 @@ export const Pagos = () => {
                     </h2>
                     <p className="text-gray-500 text-sm">Administración de ingresos de LM Robótica.</p>
                 </div>
-                <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/20">
+                <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/20"
+                >
                     <Plus size={20} /> Registrar Pago
                 </button>
             </div>
@@ -75,6 +81,10 @@ export const Pagos = () => {
                     </tbody>
                 </table>
             </div>
+            <ModalNuevoPago
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </div>
     );
 };
