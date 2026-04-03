@@ -1,4 +1,4 @@
-// pages/Pagos/hooks/useNuevoPago.ts
+import { useState, useMemo } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useAlumnosQueries } from "../../Alumnos/hooks/queries/useAlumnosQueries";
@@ -7,6 +7,18 @@ import { usePagosQueries } from "./usePagosQueries";
 export const useNuevoPago = (onClose: () => void) => {
   const { alumnosQuery } = useAlumnosQueries();
   const { registrarPago, isRegistrando } = usePagosQueries();
+
+  // Estado para el término de búsqueda
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const alumnos = alumnosQuery.data || [];
+
+  // Filtrado reactivo de alumnos
+  const filteredAlumnos = useMemo(() => {
+    return alumnos.filter((a: any) =>
+      a.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [alumnos, searchTerm]);
 
   const formik = useFormik({
     initialValues: {
@@ -29,6 +41,7 @@ export const useNuevoPago = (onClose: () => void) => {
       registrarPago(values, {
         onSuccess: () => {
           formik.resetForm();
+          setSearchTerm("");
           onClose();
         },
       });
@@ -37,7 +50,9 @@ export const useNuevoPago = (onClose: () => void) => {
 
   return {
     formik,
-    alumnos: alumnosQuery.data || [],
+    alumnos: filteredAlumnos,
+    searchTerm,
+    setSearchTerm,
     isLoadingAlumnos: alumnosQuery.isLoading,
     isRegistrando,
   };

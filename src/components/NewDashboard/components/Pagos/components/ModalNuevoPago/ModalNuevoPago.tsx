@@ -1,4 +1,4 @@
-// pages/Pagos/components/ModalNuevoPago.tsx
+import { useState } from "react";
 import {
   X,
   DollarSign,
@@ -6,6 +6,7 @@ import {
   Loader2,
   CheckCircle,
   CalendarDays,
+  Search,
 } from "lucide-react";
 import { useNuevoPago } from "../../hooks/useNuevoPago";
 
@@ -16,7 +17,9 @@ export const ModalNuevoPago = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const { formik, alumnos, isRegistrando } = useNuevoPago(onClose);
+  const { formik, alumnos, isRegistrando, searchTerm, setSearchTerm } =
+    useNuevoPago(onClose);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   if (!isOpen) return null;
 
@@ -38,30 +41,64 @@ export const ModalNuevoPago = ({
 
         <form onSubmit={formik.handleSubmit} className="p-6 space-y-5">
           {/* Selector de Alumno */}
-          <div className="space-y-1">
+          <div className="space-y-1 relative">
             <label className="text-xs font-bold text-gray-400 uppercase ml-1">
               Ingeniero
             </label>
             <div className="relative">
-              <User
+              <Search
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"
                 size={18}
               />
-              <select
-                {...formik.getFieldProps("alumno_id")}
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none appearance-none text-gray-700"
-              >
-                <option value="">Seleccionar alumno...</option>
-                {alumnos.map((a: any) => (
-                  <option key={a.id} value={a.id}>
-                    {a.nombre}
-                  </option>
-                ))}
-              </select>
+              <input
+                type="text"
+                placeholder="Buscar ingeniero..."
+                value={searchTerm}
+                onFocus={() => setShowDropdown(true)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setShowDropdown(true);
+                }}
+                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-gray-700"
+              />
             </div>
+
+            {/* Dropdown de resultados */}
+            {showDropdown && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto">
+                {alumnos.length > 0 ? (
+                  alumnos.map((a: any) => (
+                    <button
+                      key={a.id}
+                      type="button"
+                      className={`w-full text-left px-4 py-3 hover:bg-emerald-50 transition-colors flex items-center justify-between ${
+                        formik.values.alumno_id === a.id
+                          ? "bg-emerald-50 text-emerald-700 font-medium"
+                          : "text-gray-600"
+                      }`}
+                      onClick={() => {
+                        formik.setFieldValue("alumno_id", a.id);
+                        setSearchTerm(a.nombre);
+                        setShowDropdown(false);
+                      }}
+                    >
+                      {a.nombre}
+                      {formik.values.alumno_id === a.id && (
+                        <CheckCircle size={14} />
+                      )}
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-4 py-3 text-sm text-gray-400">
+                    No se encontraron resultados
+                  </div>
+                )}
+              </div>
+            )}
+            {/* Input oculto para validación de Formik si es necesario */}
+            <input type="hidden" {...formik.getFieldProps("alumno_id")} />
           </div>
 
-          {/* Nueva Selección de Duración */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-gray-400 uppercase ml-1">
               Duración del Pago
