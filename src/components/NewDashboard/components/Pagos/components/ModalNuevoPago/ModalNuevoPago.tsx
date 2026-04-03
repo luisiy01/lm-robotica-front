@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   X,
   DollarSign,
-  User,
   Loader2,
   CheckCircle,
   CalendarDays,
