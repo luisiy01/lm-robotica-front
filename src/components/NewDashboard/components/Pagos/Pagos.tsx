@@ -20,7 +20,7 @@ export const Pagos = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Extraemos la lógica procesada del custom hook
-  const { searchTerm, setSearchTerm, filteredPagos, stats } = usePagos(pagos);
+  const { dateRange, setDateRange, filteredPagos, stats } = usePagos(pagos);
 
   if (isLoading)
     return (
@@ -51,7 +51,7 @@ export const Pagos = () => {
       </div>
 
       {/* CARDS USANDO STATS DEL HOOK */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
           <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-500">
             <TrendingUp size={24} />
@@ -65,22 +65,58 @@ export const Pagos = () => {
             </p>
           </div>
         </div>
-        {/* ... otras cards ... */}
-      </div>
 
-      {/* BARRA DE BÚSQUEDA */}
-      <div className="relative w-full md:w-96">
-        <Search
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-          size={20}
-        />
-        <input
-          type="text"
-          placeholder="Buscar pago por alumno..."
-          className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        {/* BARRA DE BÚSQUEDA */}
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">
+              Fecha Inicio
+            </label>
+            <div className="relative">
+              <Calendar
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"
+                size={16}
+              />
+              <input
+                type="date"
+                className="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm text-gray-600"
+                value={dateRange.inicio}
+                onChange={(e) =>
+                  setDateRange({ ...dateRange, inicio: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">
+              Fecha Fin
+            </label>
+            <div className="relative">
+              <Calendar
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"
+                size={16}
+              />
+              <input
+                type="date"
+                className="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm text-gray-600"
+                value={dateRange.fin}
+                onChange={(e) =>
+                  setDateRange({ ...dateRange, fin: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          {(dateRange.inicio || dateRange.fin) && (
+            <button
+              onClick={() => setDateRange({ inicio: "", fin: "" })}
+              className="mb-1 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+            >
+              Limpiar
+            </button>
+          )}
+        </div>
       </div>
 
       {/* TABLA USANDO FILTEREDPAGOS */}
