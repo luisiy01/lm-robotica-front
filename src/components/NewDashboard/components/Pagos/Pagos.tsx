@@ -89,10 +89,10 @@ export const Pagos = () => {
           <thead className="bg-gray-50/50 border-b border-gray-100">
             <tr>
               <th className="p-5 text-xs font-bold text-gray-400 uppercase">
-                Fecha de Pagada
+                Fecha de Pago
               </th>
               <th className="p-5 text-xs font-bold text-gray-400 uppercase">
-                Ingeniero
+                Alumno
               </th>
               <th className="p-5 text-xs font-bold text-gray-400 uppercase">
                 Concepto
@@ -102,6 +102,9 @@ export const Pagos = () => {
               </th>
               <th className="p-5 text-xs font-bold text-gray-400 uppercase">
                 Monto
+              </th>
+              <th className="p-5 text-xs font-bold text-gray-400 uppercase">
+                Proximo Pago
               </th>
             </tr>
           </thead>
@@ -137,6 +140,20 @@ export const Pagos = () => {
 
                 <td className="p-5 font-black text-gray-800">
                   ${pago.monto.toLocaleString()}
+                </td>
+                <td className="p-5 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <Calendar size={14} className="text-gray-400" />
+                    {new Date(
+                      new Date(pago.fecha_pago).setMonth(
+                        new Date(pago.fecha_pago).getMonth() + pago.duracion,
+                      ),
+                    ).toLocaleDateString("es-MX", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </div>
                 </td>
               </tr>
             ))}
