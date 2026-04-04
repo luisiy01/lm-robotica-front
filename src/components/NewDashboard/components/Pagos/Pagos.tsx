@@ -3,10 +3,11 @@ import {
   DollarSign,
   Plus,
   Loader2,
-  Search,
   TrendingUp,
   CalendarDays,
   Calendar,
+  FileText,
+  TableIcon,
 } from "lucide-react";
 import { usePagosQueries } from "./hooks/usePagosQueries";
 import { usePagos } from "./hooks/usePagos"; // Importamos el nuevo hook
@@ -20,7 +21,14 @@ export const Pagos = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Extraemos la lógica procesada del custom hook
-  const { dateRange, setDateRange, filteredPagos, stats } = usePagos(pagos);
+  const {
+    dateRange,
+    setDateRange,
+    filteredPagos,
+    stats,
+    exportToExcel,
+    exportToPDF,
+  } = usePagos(pagos);
 
   if (isLoading)
     return (
@@ -47,6 +55,22 @@ export const Pagos = () => {
           className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/20"
         >
           <Plus size={20} /> Registrar Pago
+        </button>
+      </div>
+
+      {/* BOTONES DE DESCARGA */}
+      <div className="flex gap-2">
+        <button
+          onClick={exportToPDF}
+          className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl font-bold text-xs hover:bg-red-100 transition-colors"
+        >
+          <FileText size={16} /> PDF
+        </button>
+        <button
+          onClick={exportToExcel}
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl font-bold text-xs hover:bg-emerald-100 transition-colors"
+        >
+          <TableIcon size={16} /> Excel
         </button>
       </div>
 
