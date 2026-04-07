@@ -91,55 +91,58 @@ export const Pagos = () => {
         </div>
 
         {/* BARRA DE BÚSQUEDA */}
-        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">
-              Fecha Inicio
-            </label>
-            <div className="relative">
-              <Calendar
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"
-                size={16}
-              />
-              <input
-                type="date"
-                className="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm text-gray-600"
-                value={dateRange.inicio}
-                onChange={(e) =>
-                  setDateRange({ ...dateRange, inicio: e.target.value })
-                }
-              />
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm ">
+          <h3 className="font-bold text-gray-800 flex items-center gap-2">
+            Busqueda por fecha
+          </h3>
+          <div className="flex items-center gap-4">
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">
+                Fecha Inicio
+              </label>
+              <div className="relative">
+                <Calendar
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"
+                  size={16}
+                />
+                <input
+                  type="date"
+                  className="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm text-gray-600"
+                  value={dateRange.inicio}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, inicio: e.target.value })
+                  }
+                />
+              </div>
             </div>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">
-              Fecha Fin
-            </label>
-            <div className="relative">
-              <Calendar
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"
-                size={16}
-              />
-              <input
-                type="date"
-                className="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm text-gray-600"
-                value={dateRange.fin}
-                onChange={(e) =>
-                  setDateRange({ ...dateRange, fin: e.target.value })
-                }
-              />
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">
+                Fecha Fin
+              </label>
+              <div className="relative">
+                <Calendar
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500"
+                  size={16}
+                />
+                <input
+                  type="date"
+                  className="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-sm text-gray-600"
+                  value={dateRange.fin}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, fin: e.target.value })
+                  }
+                />
+              </div>
             </div>
+            {(dateRange.inicio || dateRange.fin) && (
+              <button
+                onClick={() => setDateRange({ inicio: "", fin: "" })}
+                className="mb-1 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+              >
+                Limpiar
+              </button>
+            )}
           </div>
-
-          {(dateRange.inicio || dateRange.fin) && (
-            <button
-              onClick={() => setDateRange({ inicio: "", fin: "" })}
-              className="mb-1 px-4 py-2 text-xs font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-            >
-              Limpiar
-            </button>
-          )}
         </div>
       </div>
 

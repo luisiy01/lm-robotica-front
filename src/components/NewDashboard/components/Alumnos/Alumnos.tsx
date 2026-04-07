@@ -4,11 +4,11 @@ import {
   Search,
   UserPlus,
   FileText,
-  Download,
   Loader2,
   Edit2,
   Trash2,
   AlertCircle,
+  TableIcon,
 } from "lucide-react";
 import { useAlumnos } from "./hooks/useAlumnos";
 import { useAlumnosQueries } from "./hooks/queries/useAlumnosQueries";
@@ -68,17 +68,15 @@ export const Alumnos = () => {
           {/* Botones de Exportación */}
           <button
             onClick={exportToExcel}
-            className="p-2.5 bg-green-50 text-green-600 rounded-xl hover:bg-green-100 transition-colors border border-green-200 shadow-sm"
-            title="Exportar a Excel"
+            className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-600 rounded-xl font-bold text-xs hover:bg-green-100 transition-colors"
           >
-            <Download size={20} />
+            <TableIcon size={16} /> Excel
           </button>
           <button
             onClick={exportToPDF}
-            className="p-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors border border-red-200 shadow-sm"
-            title="Exportar a PDF"
+            className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl font-bold text-xs hover:bg-red-100 transition-colors"
           >
-            <FileText size={20} />
+            <FileText size={16} /> PDF
           </button>
 
           <button
