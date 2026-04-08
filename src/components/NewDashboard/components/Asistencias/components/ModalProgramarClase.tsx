@@ -47,9 +47,9 @@ export const ModalProgramarClase = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade">
       <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-scale-up">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-blue-50/50">
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-emerald-50/50">
           <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-            <UserPlus className="text-blue-600" /> Programar Clase
+            <UserPlus className="text-emerald-500" /> Programar Clase
           </h3>
           <button
             onClick={onClose}
@@ -173,7 +173,7 @@ export const ModalProgramarClase = ({
             <button
               type="submit"
               disabled={isGuardando}
-              className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2"
+              className="flex-[2] bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2"
             >
               {isGuardando ? (
                 <Loader2 className="animate-spin" />
