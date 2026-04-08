@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAsistencias } from "../../hooks/useAsistencias";
+import { useNuevoPago } from "../../../Pagos/hooks/useNuevoPago";
+import { useAlumnosQueries } from "../../../Alumnos/hooks/queries/useAlumnosQueries";
 
 export const useModalProgramarClase = ({
   isOpen,
@@ -12,11 +14,19 @@ export const useModalProgramarClase = ({
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const { alumnosQuery } = useAlumnosQueries();
+  const { searchTerm, setSearchTerm } = useNuevoPago(() => {});
+
+  const alumnos = alumnosQuery.data || [];
+
+  const filteredAlumnos = useMemo(() => {
+    return alumnos.filter((a: any) =>
+      a.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [alumnos, searchTerm]);
+
   const {
     isGuardando,
-    searchTerm,
-    setSearchTerm,
-    filteredAlumnos,
     alumnoSeleccionado,
     setAlumnoSeleccionado,
     horaSeleccionada,
@@ -37,7 +47,7 @@ export const useModalProgramarClase = ({
     isGuardando,
     searchTerm,
     setSearchTerm,
-    filteredAlumnos,
+    alumnos: filteredAlumnos,
     alumnoSeleccionado,
     setAlumnoSeleccionado,
     horaSeleccionada,

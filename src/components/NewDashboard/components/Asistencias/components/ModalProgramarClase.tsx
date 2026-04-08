@@ -36,7 +36,7 @@ export const ModalProgramarClase = ({
     isGuardando,
     searchTerm,
     setSearchTerm,
-    filteredAlumnos,
+    alumnos,
     alumnoSeleccionado,
     setAlumnoSeleccionado,
     horaSeleccionada,
@@ -85,8 +85,8 @@ export const ModalProgramarClase = ({
 
             {showDropdown && (
               <div className="absolute z-10 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto">
-                {filteredAlumnos.length > 0 ? (
-                  filteredAlumnos.map((a: any) => (
+                {alumnos.length > 0 ? (
+                  alumnos.map((a: any) => (
                     <button
                       key={a.id}
                       type="button"
