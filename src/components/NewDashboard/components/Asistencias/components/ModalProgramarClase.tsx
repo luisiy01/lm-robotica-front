@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
 import {
   X,
   UserPlus,
@@ -10,7 +8,7 @@ import {
   CalendarDays,
   Loader2,
 } from "lucide-react";
-import { useAsistencias } from "../hooks/useAsistencias";
+import { useModalProgramarClase } from "./hooks/useModalProgramarClase";
 
 interface ModalProps {
   isOpen: boolean;
@@ -23,9 +21,18 @@ export const ModalProgramarClase = ({
   onClose,
   selectedDay,
 }: ModalProps) => {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const modalData = useModalProgramarClase({
+    isOpen,
+    onClose,
+    selectedDay,
+  });
+
+  if (!isOpen || !modalData) return null;
 
   const {
+    handleFormSubmit,
+    showDropdown,
+    setShowDropdown,
     isGuardando,
     searchTerm,
     setSearchTerm,
@@ -34,15 +41,7 @@ export const ModalProgramarClase = ({
     setAlumnoSeleccionado,
     horaSeleccionada,
     setHoraSeleccionada,
-    guardarHorario,
-  } = useAsistencias(onClose);
-
-  if (!isOpen) return null;
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    guardarHorario(selectedDay);
-  };
+  } = modalData;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade">
