@@ -1,25 +1,39 @@
-import axios from "axios";
 const apiUrl = import.meta.env.VITE_API_URL;
+import api from "./api"; // Asumiendo que esta es tu configuración base de axios
 
-export const getAllAsistencias = async (params?: any): Promise<any> => {
-  try {
-    const response = await axios.get(`${apiUrl}/asistencia/find`, {
-      params,
-    });
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const asistenciasService = {
+  /**
+   * Registra una nueva programación de clase para un alumno
+   * @param alumnoId UUID del alumno
+   * @param fecha Formato YYYY-MM-DD
+   * @param hora Formato HH:mm
+   */
+  registrarAsistencia: async (
+    alumnoId: string,
+    fecha: string,
+    hora: string,
+  ) => {
+    try {
+      const response = await api.post(`${apiUrl}/asistencias/programar`, {
+        alumno_id: alumnoId,
+        fecha: fecha,
+        hora: hora,
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data?.message || "Error al programar la clase";
+    }
+  },
 
-export const actualizarAsistencia = async (
-  id: string,
-  postData: any
-): Promise<any> => {
-  try {
-    const response = await axios.patch(`${apiUrl}/asistencia/${id}`, postData);
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
+  /**
+   * Obtiene la lista de alumnos programados para una fecha específica
+   */
+  obtenerAsistenciasPorFecha: async (fecha: string) => {
+    try {
+      const response = await api.get(`${apiUrl}/asistencias?fecha=${fecha}`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data?.message || "Error al obtener las asistencias";
+    }
+  },
 };

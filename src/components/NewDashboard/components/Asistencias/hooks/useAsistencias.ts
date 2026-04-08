@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-//import Swal from "sweetalert2"; // Asumiendo que usas SweetAlert para notificaciones como en otros módulos
+import { asistenciasService } from "../../../../../services/asistencia.service";
+import { toast } from "sonner";
 
 export const useAsistencias = (onSuccess?: () => void) => {
   const [alumnos, setAlumnos] = useState<any[]>([]); // Alumnos programados del día
@@ -56,31 +57,24 @@ export const useAsistencias = (onSuccess?: () => void) => {
 
   // 4. Guardar nueva programación
   const guardarHorario = async (fecha: Date | undefined) => {
+    console.log("here?");
     if (!alumnoSeleccionado || !fecha || !horaSeleccionada) {
-      //Swal.fire("Error", "Por favor completa todos los campos", "error");
+      toast.error("Por favor completa todos los campos");
       return;
     }
 
     setIsGuardando(true);
-    const payload = {
-      alumno_id: alumnoSeleccionado.id,
-      fecha: format(fecha, "yyyy-MM-dd"),
-      hora: horaSeleccionada,
-    };
+
+    const fechaFormateada = format(fecha, "yyyy-MM-dd");
 
     try {
-      // Llamada al endpoint que creamos de NestJS
-      // await api.post('/asistencias/registrar', payload);
+      await asistenciasService.registrarAsistencia(
+        alumnoSeleccionado.id,
+        fechaFormateada,
+        horaSeleccionada,
+      );
 
-      console.log("Enviando a NestJS:", payload);
-      await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulación
-
-      /*  Swal.fire({
-        icon: "success",
-        title: "¡Clase programada!",
-        showConfirmButton: false,
-        timer: 1500,
-      }); */
+      toast.success("¡Clase programada!");
 
       // Limpiar estados locales
       setSearchTerm("");
@@ -90,7 +84,7 @@ export const useAsistencias = (onSuccess?: () => void) => {
       if (onSuccess) onSuccess();
       fetchAlumnosPorDia(fecha); // Recargar la tabla
     } catch (error) {
-      //Swal.fire("Error", "No se pudo registrar la clase", "error");
+      toast.error("No se pudo registrar la clase");
     } finally {
       setIsGuardando(false);
     }
