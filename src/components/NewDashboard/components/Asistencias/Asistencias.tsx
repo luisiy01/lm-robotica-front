@@ -23,7 +23,7 @@ export function Asistencias() {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 relative">
       {/* Encabezado con Botón de Acción */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
         <div className="flex items-center gap-3">
           <CalendarDays className="w-8 h-8 text-blue-600" />
           <div>
@@ -58,7 +58,7 @@ export function Asistencias() {
 
         {/* Lado Derecho: Tabla */}
         <div className="lg:col-span-8 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-          <div className="p-5 border-b bg-gray-50 flex justify-between items-center">
+          <div className="p-5 bg-gray-50 flex justify-between items-center">
             <h3 className="font-semibold text-gray-700 flex items-center gap-2">
               <Users className="w-5 h-5 text-gray-500" />
               Alumnos para el{" "}
