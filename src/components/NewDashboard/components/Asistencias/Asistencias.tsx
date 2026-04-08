@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { CalendarDays, Users, UserPlus } from "lucide-react";
+import { CalendarDays, Users, UserPlus, User } from "lucide-react";
 import "react-day-picker/dist/style.css";
 import { useAsistencias } from "./hooks/useAsistencias";
 import { ModalProgramarClase } from "./components/ModalProgramarClase";
@@ -11,7 +11,11 @@ export function Asistencias() {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { alumnos, fetchAlumnosPorDia } = useAsistencias();
+  const { alumnos, fetchAlumnosPorDia, useAsistenciasDelDia } =
+    useAsistencias();
+
+  const { data: asistencias = [], isLoading } =
+    useAsistenciasDelDia(selectedDay);
 
   useEffect(() => {
     fetchAlumnosPorDia(selectedDay);
@@ -71,23 +75,63 @@ export function Asistencias() {
                     Alumno
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Curso
+                    Horario
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Horario
+                    Acciones
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {/* ... Mismo mapeo de alumnos que antes ... */}
-                {alumnos.length === 0 && (
+                {isLoading ? (
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="px-6 py-10 text-center text-gray-400"
+                    >
+                      Cargando información...
+                    </td>
+                  </tr>
+                ) : asistencias.length > 0 ? (
+                  asistencias.map((asistencia: any) => (
+                    <tr
+                      key={asistencia.id}
+                      className="hover:bg-blue-50/50 transition-colors"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
+                            <User size={16} />
+                          </div>
+                          <span className="text-sm font-medium text-gray-900">
+                            {asistencia.alumnos?.nombre}{" "}
+                            {asistencia.alumnos?.apellido}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono">
+                        {asistencia.hora}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <span
+                          className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
+                            asistencia.asistio
+                              ? "bg-green-100 text-green-700"
+                              : "bg-orange-100 text-orange-700"
+                          }`}
+                        >
+                          {asistencia.asistio ? "Asistió" : "Pendiente"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
                   <tr>
                     <td
                       colSpan={3}
                       className="px-6 py-12 text-center text-gray-400 italic"
                     >
-                      No hay alumnos programados. Haz clic en "Registrar" para
-                      añadir uno.
+                      No hay alumnos programados para este día.
                     </td>
                   </tr>
                 )}

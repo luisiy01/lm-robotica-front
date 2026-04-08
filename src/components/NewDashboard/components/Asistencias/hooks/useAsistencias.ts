@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { asistenciasService } from "../../../../../services/asistencia.service";
 import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useAsistencias = (onSuccess?: () => void) => {
   const [alumnos, setAlumnos] = useState<any[]>([]); // Alumnos programados del día
@@ -11,6 +12,18 @@ export const useAsistencias = (onSuccess?: () => void) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState<any>(null);
   const [horaSeleccionada, setHoraSeleccionada] = useState("");
+
+  const queryClient = useQueryClient();
+
+  const useAsistenciasDelDia = (fecha: Date | undefined) => {
+    const fechaFormateada = fecha ? format(fecha, "yyyy-MM-dd") : "";
+    return useQuery({
+      queryKey: ["asistencias", fechaFormateada],
+      queryFn: () =>
+        asistenciasService.obtenerAsistenciasPorFecha(fechaFormateada),
+      enabled: !!fecha, // Solo se ejecuta si hay una fecha seleccionada
+    });
+  };
 
   // 1. Cargar lista de alumnos para el buscador (Ingenieros)
   useEffect(() => {
@@ -57,7 +70,6 @@ export const useAsistencias = (onSuccess?: () => void) => {
 
   // 4. Guardar nueva programación
   const guardarHorario = async (fecha: Date | undefined) => {
-    console.log("here?");
     if (!alumnoSeleccionado || !fecha || !horaSeleccionada) {
       toast.error("Por favor completa todos los campos");
       return;
@@ -103,5 +115,6 @@ export const useAsistencias = (onSuccess?: () => void) => {
     setHoraSeleccionada,
     fetchAlumnosPorDia,
     guardarHorario,
+    useAsistenciasDelDia,
   };
 };
