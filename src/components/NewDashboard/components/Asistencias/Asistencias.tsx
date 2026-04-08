@@ -49,7 +49,7 @@ export function Asistencias() {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all shadow-sm active:scale-95"
+          className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium transition-all shadow-sm active:scale-95"
         >
           <UserPlus className="w-5 h-5" />
           Registrar Alumno a Clase

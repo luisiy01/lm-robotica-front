@@ -81,7 +81,7 @@ export const Alumnos = () => {
 
           <button
             onClick={handleCreate}
-            className="flex items-center justify-center gap-2 bg-[#0EA5E9] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#0284C7] transition-all shadow-lg shadow-sky-500/20"
+            className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-emerald-600 transition-all shadow-lg shadow-sky-500/20"
           >
             <UserPlus size={18} />
             <span className="hidden sm:inline">Inscribir Alumno</span>
