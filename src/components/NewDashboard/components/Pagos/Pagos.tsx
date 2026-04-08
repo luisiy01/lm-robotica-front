@@ -50,30 +50,27 @@ export const Pagos = () => {
             Administración de ingresos de LM Robótica.
           </p>
         </div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/20"
-        >
-          <Plus size={20} /> Registrar Pago
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={exportToExcel}
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl font-bold text-xs hover:bg-emerald-100 transition-colors"
+          >
+            <TableIcon size={16} /> Excel
+          </button>
+          <button
+            onClick={exportToPDF}
+            className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl font-bold text-xs hover:bg-red-100 transition-colors"
+          >
+            <FileText size={16} /> PDF
+          </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/20"
+          >
+            <Plus size={20} /> Registrar Pago
+          </button>
+        </div>
       </div>
-
-      {/* BOTONES DE DESCARGA */}
-      <div className="flex gap-2">
-        <button
-          onClick={exportToPDF}
-          className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl font-bold text-xs hover:bg-red-100 transition-colors"
-        >
-          <FileText size={16} /> PDF
-        </button>
-        <button
-          onClick={exportToExcel}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl font-bold text-xs hover:bg-emerald-100 transition-colors"
-        >
-          <TableIcon size={16} /> Excel
-        </button>
-      </div>
-
       {/* CARDS USANDO STATS DEL HOOK */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
