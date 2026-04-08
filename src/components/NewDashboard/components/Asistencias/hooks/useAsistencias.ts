@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useAsistencias = (onSuccess?: () => void) => {
   const [listaBusqueda, setListaBusqueda] = useState<any[]>([]); // Alumnos para el buscador
-  const [loading, setLoading] = useState(false);
+  const [loading, _setLoading] = useState(false);
   const [isGuardando, setIsGuardando] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState<any>(null);
