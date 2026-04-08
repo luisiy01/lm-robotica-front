@@ -6,12 +6,14 @@ import { CalendarDays, Users, UserPlus, User, Trash2 } from "lucide-react";
 import "react-day-picker/dist/style.css";
 import { useAsistencias } from "./hooks/useAsistencias";
 import { ModalProgramarClase } from "./components/ModalProgramarClase";
+import { toast } from "sonner";
 
 export function Asistencias() {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { fetchAlumnosPorDia, useAsistenciasDelDia } = useAsistencias();
+  const { fetchAlumnosPorDia, useAsistenciasDelDia, eliminarAsistencia } =
+    useAsistencias();
 
   const { data: asistencias = [], isLoading } =
     useAsistenciasDelDia(selectedDay);
@@ -114,7 +116,21 @@ export function Asistencias() {
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         <button
                           onClick={() => {
-                            //confirmDelete(alumno.id);
+                            toast.error("¿Eliminar clase?", {
+                              description: `Se borrará la programación para ${asistencia.alumnos?.nombre}`,
+                              action: {
+                                label: "Eliminar",
+                                onClick: () => {
+                                  eliminarAsistencia(asistencia.id);
+                                },
+                              },
+                              cancel: {
+                                label: "Cancelar",
+                                onClick: () =>
+                                  console.log("Eliminación cancelada"),
+                              },
+                              duration: 10000,
+                            });
                           }}
                           className="p-2 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all"
                           title="Eliminar Alumno"

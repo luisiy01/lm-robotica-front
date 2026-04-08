@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { asistenciasService } from "../../../../../services/asistencia.service";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useAsistencias = (onSuccess?: () => void) => {
   const [listaBusqueda, setListaBusqueda] = useState<any[]>([]); // Alumnos para el buscador
@@ -99,6 +99,16 @@ export const useAsistencias = (onSuccess?: () => void) => {
     }
   };
 
+  const mutationEliminar = useMutation({
+    mutationFn: (id: string) => asistenciasService.eliminarAsistencia(id),
+    onSuccess: () => {
+      toast.success("Asistencia eliminada correctamente");
+    },
+    onError: () => {
+      toast.error("Error al eliminar la asistencia");
+    },
+  });
+
   return {
     loading,
     isGuardando,
@@ -112,5 +122,7 @@ export const useAsistencias = (onSuccess?: () => void) => {
     fetchAlumnosPorDia,
     guardarHorario,
     useAsistenciasDelDia,
+    eliminarAsistencia: mutationEliminar.mutate,
+    isEliminando: mutationEliminar.isPending,
   };
 };
