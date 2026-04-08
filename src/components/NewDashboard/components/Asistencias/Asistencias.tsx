@@ -6,7 +6,6 @@ import {
   CalendarDays,
   Users,
   Clock,
-  GraduationCap,
   UserPlus,
   X,
   Search,
@@ -16,8 +15,8 @@ import "react-day-picker/dist/style.css";
 
 export function Asistencias() {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
-  const [alumnos, setAlumnos] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [alumnos, _setAlumnos] = useState([]);
+  const [_loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal
 
   // Estados para el buscador del modal
@@ -44,7 +43,7 @@ export function Asistencias() {
     }
   }, [selectedDay]);
 
-  const fetchAlumnosPorDia = async (fecha: string) => {
+  const fetchAlumnosPorDia = async (_fecha: string) => {
     setLoading(true);
     // Aquí iría tu fetch a NestJS
     setLoading(false);
@@ -133,8 +132,8 @@ export function Asistencias() {
       {/* MODAL PARA REGISTRAR ALUMNO */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
-            {/* Header del Modal */}
+          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-scale-up">
+            {/* Header del Modal - Usando el estilo de ModalNuevoPago */}
             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-blue-50/50">
               <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
                 <UserPlus className="text-blue-600" /> Programar Clase
@@ -143,18 +142,19 @@ export function Asistencias() {
                 onClick={() => {
                   setIsModalOpen(false);
                   setSearchTerm("");
+                  setShowDropdown(false);
                 }}
-                className="p-2 hover:bg-white rounded-full text-gray-400"
+                className="p-2 hover:bg-white rounded-full transition-colors text-gray-400"
               >
                 <X size={20} />
               </button>
             </div>
 
             <form className="p-6 space-y-5">
-              {/* BUSCADOR DE ALUMNO (ESTILO MODALNUEVOPAGO) */}
+              {/* Selector de Alumno - Lógica idéntica a ModalNuevoPago */}
               <div className="space-y-1 relative">
                 <label className="text-xs font-bold text-gray-400 uppercase ml-1">
-                  Buscar Alumno
+                  Ingeniero
                 </label>
                 <div className="relative">
                   <Search
@@ -163,7 +163,7 @@ export function Asistencias() {
                   />
                   <input
                     type="text"
-                    placeholder="Escribe el nombre..."
+                    placeholder="Buscar ingeniero..."
                     value={searchTerm}
                     onFocus={() => setShowDropdown(true)}
                     onChange={(e) => {
@@ -175,10 +175,10 @@ export function Asistencias() {
                 </div>
 
                 {/* Dropdown de resultados */}
-                {showDropdown && searchTerm && (
+                {showDropdown && (
                   <div className="absolute z-10 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto">
                     {filteredAlumnos.length > 0 ? (
-                      filteredAlumnos.map((a) => (
+                      filteredAlumnos.map((a: any) => (
                         <button
                           key={a.id}
                           type="button"
@@ -195,7 +195,7 @@ export function Asistencias() {
                         >
                           {a.nombre}
                           {alumnoSeleccionado?.id === a.id && (
-                            <CheckCircle size={14} />
+                            <CheckCircle size={14} className="text-blue-600" />
                           )}
                         </button>
                       ))
@@ -208,41 +208,56 @@ export function Asistencias() {
                 )}
               </div>
 
-              {/* Fecha y Hora */}
+              {/* Fecha y Hora - Dropdown de Horas Fijas */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-gray-400 uppercase ml-1">
                     Fecha
                   </label>
-                  <input
-                    type="text"
-                    disabled
-                    value={selectedDay ? format(selectedDay, "dd/MM/yyyy") : ""}
-                    className="w-full px-4 py-3 bg-gray-100 border-none rounded-xl text-gray-500 text-sm"
-                  />
+                  <div className="relative">
+                    <CalendarDays
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"
+                      size={18}
+                    />
+                    <input
+                      type="text"
+                      disabled
+                      value={
+                        selectedDay ? format(selectedDay, "dd/MM/yyyy") : ""
+                      }
+                      className="w-full pl-12 pr-4 py-3 bg-gray-100 border-none rounded-xl text-gray-500 text-sm outline-none"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-gray-400 uppercase ml-1">
-                    Hora
+                    Horario
                   </label>
                   <div className="relative">
                     <Clock
                       className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"
                       size={18}
                     />
-                    <input
-                      type="time"
-                      className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
-                    />
+                    <select className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none appearance-none text-gray-700">
+                      <option value="">Seleccionar...</option>
+                      <option value="10:00">10:00 AM</option>
+                      <option value="11:30">11:30 AM</option>
+                      <option value="03:30">03:30 PM</option>
+                      <option value="05:00">05:00 PM</option>
+                      <option value="06:30">06:30 PM</option>
+                    </select>
                   </div>
                 </div>
               </div>
 
-              {/* Botones */}
+              {/* Botones de Acción */}
               <div className="flex gap-3 pt-4">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setSearchTerm("");
+                  }}
                   className="flex-1 py-4 text-gray-400 font-bold hover:bg-gray-50 rounded-2xl transition-colors"
                 >
                   Cancelar
@@ -251,6 +266,7 @@ export function Asistencias() {
                   type="submit"
                   className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2"
                 >
+                  <CheckCircle size={20} />
                   Confirmar Clase
                 </button>
               </div>
