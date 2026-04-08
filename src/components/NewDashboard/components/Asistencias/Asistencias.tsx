@@ -7,7 +7,7 @@ import "react-day-picker/dist/style.css";
 
 export function Asistencias() {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
-  const [alumnos, setAlumnos] = useState([]);
+  const [alumnos, _setAlumnos] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export function Asistencias() {
     }
   }, [selectedDay]);
 
-  const fetchAlumnosPorDia = async (fecha: string) => {
+  const fetchAlumnosPorDia = async (_fecha: string) => {
     setLoading(true);
     // Simulación de carga o tu llamada a NestJS/Supabase aquí
     // const { data } = await supabase.from('asistencias')...
