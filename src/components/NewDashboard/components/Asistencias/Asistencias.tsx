@@ -2,16 +2,7 @@ import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import {
-  CalendarDays,
-  Users,
-  Clock,
-  UserPlus,
-  X,
-  Search,
-  CheckCircle,
-  Loader2,
-} from "lucide-react";
+import { CalendarDays, Users, UserPlus } from "lucide-react";
 import "react-day-picker/dist/style.css";
 import { useAsistencias } from "./hooks/useAsistencias";
 import { ModalProgramarClase } from "./components/ModalProgramarClase";
