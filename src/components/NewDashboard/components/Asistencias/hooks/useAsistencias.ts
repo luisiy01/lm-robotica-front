@@ -2,18 +2,15 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { asistenciasService } from "../../../../../services/asistencia.service";
 import { toast } from "sonner";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const useAsistencias = (onSuccess?: () => void) => {
-  const [alumnos, setAlumnos] = useState<any[]>([]); // Alumnos programados del día
   const [listaBusqueda, setListaBusqueda] = useState<any[]>([]); // Alumnos para el buscador
   const [loading, setLoading] = useState(false);
   const [isGuardando, setIsGuardando] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState<any>(null);
   const [horaSeleccionada, setHoraSeleccionada] = useState("");
-
-  const queryClient = useQueryClient();
 
   const useAsistenciasDelDia = (fecha: Date | undefined) => {
     const fechaFormateada = fecha ? format(fecha, "yyyy-MM-dd") : "";
@@ -103,7 +100,6 @@ export const useAsistencias = (onSuccess?: () => void) => {
   };
 
   return {
-    alumnos,
     loading,
     isGuardando,
     searchTerm,

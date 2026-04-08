@@ -11,8 +11,7 @@ export function Asistencias() {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { alumnos, fetchAlumnosPorDia, useAsistenciasDelDia } =
-    useAsistencias();
+  const { fetchAlumnosPorDia, useAsistenciasDelDia } = useAsistencias();
 
   const { data: asistencias = [], isLoading } =
     useAsistenciasDelDia(selectedDay);
