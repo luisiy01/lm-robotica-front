@@ -1,5 +1,4 @@
-import { ArrowLeft, BrickWall, Construction, Grip, Bot } from "lucide-react"; // Usamos lucide-react para los iconos
-import { Link } from "react-router"; // Asumiendo que usas react-router
+import { BrickWall, Construction, Grip, Bot } from "lucide-react"; // Usamos lucide-react para los iconos
 
 export function PaginaEnConstruccion() {
   // Simulación de "Legos" o piezas de construcción flotando de fondo
@@ -65,15 +64,6 @@ export function PaginaEnConstruccion() {
         <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden border border-gray-200">
           <div className="h-full bg-blue-600 rounded-full w-2/3 animate-pulse"></div>
         </div>
-
-        {/* Botón de regreso */}
-        <Link
-          to="/dashboard" // O la ruta principal que uses
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-95 group"
-        >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          Regresar al Dashboard
-        </Link>
       </div>
 
       {/* --- Footer sutil --- */}

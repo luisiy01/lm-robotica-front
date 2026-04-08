@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { asistenciasService } from "../../../../../services/asistencia.service";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 
 export const useAsistencias = (onSuccess?: () => void) => {
   const [listaBusqueda, setListaBusqueda] = useState<any[]>([]); // Alumnos para el buscador
@@ -11,6 +12,7 @@ export const useAsistencias = (onSuccess?: () => void) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState<any>(null);
   const [horaSeleccionada, setHoraSeleccionada] = useState("");
+  const navigate = useNavigate();
 
   const useAsistenciasDelDia = (fecha: Date | undefined) => {
     const fechaFormateada = fecha ? format(fecha, "yyyy-MM-dd") : "";
@@ -92,12 +94,23 @@ export const useAsistencias = (onSuccess?: () => void) => {
 
       if (onSuccess) onSuccess();
       fetchAlumnosPorDia(fecha); // Recargar la tabla
+      navigate("/dashboard/asistencias");
     } catch (error) {
       toast.error("No se pudo registrar la clase");
     } finally {
       setIsGuardando(false);
     }
   };
+
+  const mutationEliminar = useMutation({
+    mutationFn: (id: string) => asistenciasService.eliminarAsistencia(id),
+    onSuccess: () => {
+      toast.success("Asistencia eliminada correctamente");
+    },
+    onError: () => {
+      toast.error("Error al eliminar la asistencia");
+    },
+  });
 
   return {
     loading,
@@ -112,5 +125,7 @@ export const useAsistencias = (onSuccess?: () => void) => {
     fetchAlumnosPorDia,
     guardarHorario,
     useAsistenciasDelDia,
+    eliminarAsistencia: mutationEliminar.mutate,
+    isEliminando: mutationEliminar.isPending,
   };
 };

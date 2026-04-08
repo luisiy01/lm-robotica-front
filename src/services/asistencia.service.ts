@@ -36,4 +36,9 @@ export const asistenciasService = {
       throw error.response?.data?.message || "Error al obtener las asistencias";
     }
   },
+
+  eliminarAsistencia: async (id: string) => {
+    const response = await api.delete(`${apiUrl}/asistencias/${id}`);
+    return response.data;
+  },
 };

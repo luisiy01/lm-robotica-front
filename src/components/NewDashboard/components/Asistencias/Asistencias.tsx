@@ -6,12 +6,16 @@ import { CalendarDays, Users, UserPlus, User, Trash2 } from "lucide-react";
 import "react-day-picker/dist/style.css";
 import { useAsistencias } from "./hooks/useAsistencias";
 import { ModalProgramarClase } from "./components/ModalProgramarClase";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 export function Asistencias() {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const { fetchAlumnosPorDia, useAsistenciasDelDia } = useAsistencias();
+  const { fetchAlumnosPorDia, useAsistenciasDelDia, eliminarAsistencia } =
+    useAsistencias();
 
   const { data: asistencias = [], isLoading } =
     useAsistenciasDelDia(selectedDay);
@@ -23,7 +27,7 @@ export function Asistencias() {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 relative">
       {/* Encabezado con Botón de Acción */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
         <div className="flex items-center gap-3">
           <CalendarDays className="w-8 h-8 text-blue-600" />
           <div>
@@ -58,7 +62,7 @@ export function Asistencias() {
 
         {/* Lado Derecho: Tabla */}
         <div className="lg:col-span-8 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-          <div className="p-5 border-b bg-gray-50 flex justify-between items-center">
+          <div className="p-5 bg-gray-50 flex justify-between items-center">
             <h3 className="font-semibold text-gray-700 flex items-center gap-2">
               <Users className="w-5 h-5 text-gray-500" />
               Alumnos para el{" "}
@@ -114,7 +118,22 @@ export function Asistencias() {
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         <button
                           onClick={() => {
-                            //confirmDelete(alumno.id);
+                            toast.error("¿Eliminar clase?", {
+                              description: `Se borrará la programación para ${asistencia.alumnos?.nombre}`,
+                              action: {
+                                label: "Eliminar",
+                                onClick: () => {
+                                  eliminarAsistencia(asistencia.id);
+                                  navigate("/dashboard/asistencias");
+                                },
+                              },
+                              cancel: {
+                                label: "Cancelar",
+                                onClick: () =>
+                                  console.log("Eliminación cancelada"),
+                              },
+                              duration: 10000,
+                            });
                           }}
                           className="p-2 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all"
                           title="Eliminar Alumno"
