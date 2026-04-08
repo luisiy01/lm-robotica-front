@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { CalendarDays, Users, UserPlus, User } from "lucide-react";
+import { CalendarDays, Users, UserPlus, User, Trash2 } from "lucide-react";
 import "react-day-picker/dist/style.css";
 import { useAsistencias } from "./hooks/useAsistencias";
 import { ModalProgramarClase } from "./components/ModalProgramarClase";
@@ -112,15 +112,15 @@ export function Asistencias() {
                         {asistencia.hora}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
-                        <span
-                          className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
-                            asistencia.asistio
-                              ? "bg-green-100 text-green-700"
-                              : "bg-orange-100 text-orange-700"
-                          }`}
+                        <button
+                          onClick={() => {
+                            //confirmDelete(alumno.id);
+                          }}
+                          className="p-2 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all"
+                          title="Eliminar Alumno"
                         >
-                          {asistencia.asistio ? "Asistió" : "Pendiente"}
-                        </span>
+                          <Trash2 size={18} />
+                        </button>
                       </td>
                     </tr>
                   ))

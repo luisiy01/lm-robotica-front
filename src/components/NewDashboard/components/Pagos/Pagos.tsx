@@ -39,7 +39,7 @@ export const Pagos = () => {
     );
 
   return (
-    <div className="p-6 lg:p-10 space-y-8 animate-fade-up">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 relative">
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
