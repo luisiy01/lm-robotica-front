@@ -13,85 +13,36 @@ import {
   Loader2,
 } from "lucide-react";
 import "react-day-picker/dist/style.css";
+import { useAsistencias } from "./hooks/useAsistencias";
 
 export function Asistencias() {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
-  const [alumnos, _setAlumnos] = useState([]);
-  const [_loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal
-  const [isGuardando, setIsGuardando] = useState(false);
-
-  // Estados para el buscador del modal
-  const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [alumnoSeleccionado, setAlumnoSeleccionado] = useState<any>(null);
-  const [horaSeleccionada, setHoraSeleccionada] = useState("");
 
-  // Simulación de base de datos de alumnos para el buscador
-  // En producción, esto vendría de tu hook de Supabase/NestJS
-  const [listaBusqueda, setListaBusqueda] = useState([
-    { id: 1, nombre: "Luis García" },
-    { id: 2, nombre: "Ana Martínez" },
-    { id: 3, nombre: "Roberto Solís" },
-  ]);
-
-  const filteredAlumnos = listaBusqueda.filter((a) =>
-    a.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  // Implementación del Hook
+  const {
+    alumnos,
+    loading,
+    isGuardando,
+    searchTerm,
+    setSearchTerm,
+    filteredAlumnos,
+    alumnoSeleccionado,
+    setAlumnoSeleccionado,
+    horaSeleccionada,
+    setHoraSeleccionada,
+    fetchAlumnosPorDia,
+    guardarHorario,
+  } = useAsistencias(() => setIsModalOpen(false));
 
   useEffect(() => {
-    if (selectedDay) {
-      const fechaFormateada = format(selectedDay, "yyyy-MM-dd");
-      fetchAlumnosPorDia(fechaFormateada);
-    }
+    fetchAlumnosPorDia(selectedDay);
   }, [selectedDay]);
 
-  const fetchAlumnosPorDia = async (_fecha: string) => {
-    setLoading(true);
-    // Aquí iría tu fetch a NestJS
-    setLoading(false);
-  };
-
-  // --- LÓGICA DE GUARDADO ---
-  const handleGuardarHorario = async (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!alumnoSeleccionado || !selectedDay || !horaSeleccionada) {
-      alert("Por favor completa todos los campos");
-      return;
-    }
-
-    setIsGuardando(true);
-
-    const payload = {
-      alumno_id: alumnoSeleccionado.id,
-      fecha: format(selectedDay, "yyyy-MM-dd"),
-      hora: horaSeleccionada,
-    };
-
-    try {
-      // Sustituye con tu URL real de NestJS: http://localhost:3000/asistencias/registrar
-      console.log("Enviando datos:", payload);
-
-      // Simulación de petición
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      alert("¡Clase programada con éxito!");
-
-      // Resetear estados y cerrar modal
-      setIsModalOpen(false);
-      setSearchTerm("");
-      setAlumnoSeleccionado(null);
-      setHoraSeleccionada("");
-
-      // Refrescar lista de alumnos del día
-      fetchAlumnosPorDia(payload.fecha);
-    } catch (error) {
-      console.error("Error al guardar:", error);
-      alert("Hubo un error al guardar el horario");
-    } finally {
-      setIsGuardando(false);
-    }
+    guardarHorario(selectedDay);
   };
 
   return (
@@ -195,7 +146,7 @@ export function Asistencias() {
               </button>
             </div>
 
-            <form onSubmit={handleGuardarHorario} className="p-6 space-y-5">
+            <form onSubmit={handleFormSubmit} className="p-6 space-y-5">
               {/* Selector de Alumno - Lógica idéntica a ModalNuevoPago */}
               <div className="space-y-1 relative">
                 <label className="text-xs font-bold text-gray-400 uppercase ml-1">
