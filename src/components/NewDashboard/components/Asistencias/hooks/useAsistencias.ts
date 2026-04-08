@@ -2,17 +2,16 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { asistenciasService } from "../../../../../services/asistencia.service";
 import { toast } from "sonner";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useAsistencias = (onSuccess?: () => void) => {
   const [listaBusqueda, setListaBusqueda] = useState<any[]>([]); // Alumnos para el buscador
-  const [loading, setLoading] = useState(false);
+  const [loading, _setLoading] = useState(false);
   const [isGuardando, setIsGuardando] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState<any>(null);
   const [horaSeleccionada, setHoraSeleccionada] = useState("");
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const useAsistenciasDelDia = (fecha: Date | undefined) => {
     const fechaFormateada = fecha ? format(fecha, "yyyy-MM-dd") : "";
@@ -50,23 +49,6 @@ export const useAsistencias = (onSuccess?: () => void) => {
     a.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // 3. Obtener alumnos programados por día
-  const fetchAlumnosPorDia = async (fecha: Date | undefined) => {
-    if (!fecha) return;
-    setLoading(true);
-    try {
-      const fechaFormateada = format(fecha, "yyyy-MM-dd");
-      // Llamada a tu endpoint de NestJS
-      // const { data } = await api.get(`/asistencias?fecha=${fechaFormateada}`);
-      // setAlumnos(data);
-      console.log("Consultando alumnos para:", fechaFormateada);
-    } catch (error) {
-      console.error("Error al obtener asistencias:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // 4. Guardar nueva programación
   const guardarHorario = async (fecha: Date | undefined) => {
     if (!alumnoSeleccionado || !fecha || !horaSeleccionada) {
@@ -93,8 +75,7 @@ export const useAsistencias = (onSuccess?: () => void) => {
       setHoraSeleccionada("");
 
       if (onSuccess) onSuccess();
-      fetchAlumnosPorDia(fecha); // Recargar la tabla
-      navigate("/dashboard/asistencias");
+      queryClient.invalidateQueries({ queryKey: ["asistencias"] });
     } catch (error) {
       toast.error("No se pudo registrar la clase");
     } finally {
@@ -106,6 +87,7 @@ export const useAsistencias = (onSuccess?: () => void) => {
     mutationFn: (id: string) => asistenciasService.eliminarAsistencia(id),
     onSuccess: () => {
       toast.success("Asistencia eliminada correctamente");
+      queryClient.invalidateQueries({ queryKey: ["asistencias"] });
     },
     onError: () => {
       toast.error("Error al eliminar la asistencia");
@@ -122,7 +104,6 @@ export const useAsistencias = (onSuccess?: () => void) => {
     setAlumnoSeleccionado,
     horaSeleccionada,
     setHoraSeleccionada,
-    fetchAlumnosPorDia,
     guardarHorario,
     useAsistenciasDelDia,
     eliminarAsistencia: mutationEliminar.mutate,

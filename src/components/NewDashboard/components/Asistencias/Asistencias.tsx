@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -7,22 +7,15 @@ import "react-day-picker/dist/style.css";
 import { useAsistencias } from "./hooks/useAsistencias";
 import { ModalProgramarClase } from "./components/ModalProgramarClase";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
 
 export function Asistencias() {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
 
-  const { fetchAlumnosPorDia, useAsistenciasDelDia, eliminarAsistencia } =
-    useAsistencias();
+  const { useAsistenciasDelDia, eliminarAsistencia } = useAsistencias();
 
   const { data: asistencias = [], isLoading } =
     useAsistenciasDelDia(selectedDay);
-
-  useEffect(() => {
-    fetchAlumnosPorDia(selectedDay);
-  }, [selectedDay]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 relative">
@@ -124,7 +117,6 @@ export function Asistencias() {
                                 label: "Eliminar",
                                 onClick: () => {
                                   eliminarAsistencia(asistencia.id);
-                                  navigate("/dashboard/asistencias");
                                 },
                               },
                               cancel: {
