@@ -10,6 +10,7 @@ import {
   X,
   Search,
   CheckCircle,
+  Loader2,
 } from "lucide-react";
 import "react-day-picker/dist/style.css";
 
@@ -18,11 +19,13 @@ export function Asistencias() {
   const [alumnos, _setAlumnos] = useState([]);
   const [_loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal
+  const [isGuardando, setIsGuardando] = useState(false);
 
   // Estados para el buscador del modal
   const [searchTerm, setSearchTerm] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [alumnoSeleccionado, setAlumnoSeleccionado] = useState<any>(null);
+  const [horaSeleccionada, setHoraSeleccionada] = useState("");
 
   // Simulación de base de datos de alumnos para el buscador
   // En producción, esto vendría de tu hook de Supabase/NestJS
@@ -47,6 +50,48 @@ export function Asistencias() {
     setLoading(true);
     // Aquí iría tu fetch a NestJS
     setLoading(false);
+  };
+
+  // --- LÓGICA DE GUARDADO ---
+  const handleGuardarHorario = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!alumnoSeleccionado || !selectedDay || !horaSeleccionada) {
+      alert("Por favor completa todos los campos");
+      return;
+    }
+
+    setIsGuardando(true);
+
+    const payload = {
+      alumno_id: alumnoSeleccionado.id,
+      fecha: format(selectedDay, "yyyy-MM-dd"),
+      hora: horaSeleccionada,
+    };
+
+    try {
+      // Sustituye con tu URL real de NestJS: http://localhost:3000/asistencias/registrar
+      console.log("Enviando datos:", payload);
+
+      // Simulación de petición
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      alert("¡Clase programada con éxito!");
+
+      // Resetear estados y cerrar modal
+      setIsModalOpen(false);
+      setSearchTerm("");
+      setAlumnoSeleccionado(null);
+      setHoraSeleccionada("");
+
+      // Refrescar lista de alumnos del día
+      fetchAlumnosPorDia(payload.fecha);
+    } catch (error) {
+      console.error("Error al guardar:", error);
+      alert("Hubo un error al guardar el horario");
+    } finally {
+      setIsGuardando(false);
+    }
   };
 
   return (
@@ -150,7 +195,7 @@ export function Asistencias() {
               </button>
             </div>
 
-            <form className="p-6 space-y-5">
+            <form onSubmit={handleGuardarHorario} className="p-6 space-y-5">
               {/* Selector de Alumno - Lógica idéntica a ModalNuevoPago */}
               <div className="space-y-1 relative">
                 <label className="text-xs font-bold text-gray-400 uppercase ml-1">
@@ -238,7 +283,11 @@ export function Asistencias() {
                       className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"
                       size={18}
                     />
-                    <select className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none appearance-none text-gray-700">
+                    <select
+                      className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none appearance-none text-gray-700"
+                      value={horaSeleccionada}
+                      onChange={(e) => setHoraSeleccionada(e.target.value)}
+                    >
                       <option value="">Seleccionar...</option>
                       <option value="10:00">10:00 AM</option>
                       <option value="11:30">11:30 AM</option>
@@ -264,9 +313,14 @@ export function Asistencias() {
                 </button>
                 <button
                   type="submit"
+                  disabled={isGuardando}
                   className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2"
                 >
-                  <CheckCircle size={20} />
+                  {isGuardando ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    <CheckCircle size={20} />
+                  )}
                   Confirmar Clase
                 </button>
               </div>
