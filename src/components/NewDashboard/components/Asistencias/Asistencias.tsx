@@ -9,6 +9,8 @@ import {
   GraduationCap,
   UserPlus,
   X,
+  Search,
+  CheckCircle,
 } from "lucide-react";
 import "react-day-picker/dist/style.css";
 
@@ -17,6 +19,23 @@ export function Asistencias() {
   const [alumnos, setAlumnos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal
+
+  // Estados para el buscador del modal
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [alumnoSeleccionado, setAlumnoSeleccionado] = useState<any>(null);
+
+  // Simulación de base de datos de alumnos para el buscador
+  // En producción, esto vendría de tu hook de Supabase/NestJS
+  const [listaBusqueda, setListaBusqueda] = useState([
+    { id: 1, nombre: "Luis García" },
+    { id: 2, nombre: "Ana Martínez" },
+    { id: 3, nombre: "Roberto Solís" },
+  ]);
+
+  const filteredAlumnos = listaBusqueda.filter((a) =>
+    a.nombre.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   useEffect(() => {
     if (selectedDay) {
@@ -113,70 +132,126 @@ export function Asistencias() {
 
       {/* MODAL PARA REGISTRAR ALUMNO */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="p-6 border-b flex justify-between items-center bg-gray-50">
-              <h2 className="text-xl font-bold text-gray-800">
-                Nueva Inscripción
-              </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade">
+          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            {/* Header del Modal */}
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-blue-50/50">
+              <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <UserPlus className="text-blue-600" /> Programar Clase
+              </h3>
               <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setSearchTerm("");
+                }}
+                className="p-2 hover:bg-white rounded-full text-gray-400"
               >
-                <X className="w-6 h-6" />
+                <X size={20} />
               </button>
             </div>
 
-            <form className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Fecha Seleccionada
+            <form className="p-6 space-y-5">
+              {/* BUSCADOR DE ALUMNO (ESTILO MODALNUEVOPAGO) */}
+              <div className="space-y-1 relative">
+                <label className="text-xs font-bold text-gray-400 uppercase ml-1">
+                  Buscar Alumno
                 </label>
-                <input
-                  type="text"
-                  disabled
-                  value={
-                    selectedDay
-                      ? format(selectedDay, "PPP", { locale: es })
-                      : ""
-                  }
-                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-600 text-sm"
-                />
+                <div className="relative">
+                  <Search
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"
+                    size={18}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Escribe el nombre..."
+                    value={searchTerm}
+                    onFocus={() => setShowDropdown(true)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      setShowDropdown(true);
+                    }}
+                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
+                  />
+                </div>
+
+                {/* Dropdown de resultados */}
+                {showDropdown && searchTerm && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto">
+                    {filteredAlumnos.length > 0 ? (
+                      filteredAlumnos.map((a) => (
+                        <button
+                          key={a.id}
+                          type="button"
+                          className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center justify-between ${
+                            alumnoSeleccionado?.id === a.id
+                              ? "bg-blue-50 text-blue-700 font-medium"
+                              : "text-gray-600"
+                          }`}
+                          onClick={() => {
+                            setAlumnoSeleccionado(a);
+                            setSearchTerm(a.nombre);
+                            setShowDropdown(false);
+                          }}
+                        >
+                          {a.nombre}
+                          {alumnoSeleccionado?.id === a.id && (
+                            <CheckCircle size={14} />
+                          )}
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-3 text-sm text-gray-400">
+                        No se encontraron resultados
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Seleccionar Alumno
-                </label>
-                <select className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
-                  <option>Selecciona un alumno...</option>
-                  {/* Aquí mapearías los alumnos existentes en tu DB */}
-                </select>
+              {/* Fecha y Hora */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-400 uppercase ml-1">
+                    Fecha
+                  </label>
+                  <input
+                    type="text"
+                    disabled
+                    value={selectedDay ? format(selectedDay, "dd/MM/yyyy") : ""}
+                    className="w-full px-4 py-3 bg-gray-100 border-none rounded-xl text-gray-500 text-sm"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-gray-400 uppercase ml-1">
+                    Hora
+                  </label>
+                  <div className="relative">
+                    <Clock
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"
+                      size={18}
+                    />
+                    <input
+                      type="time"
+                      className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Hora de Clase
-                </label>
-                <input
-                  type="time"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              </div>
-
-              <div className="pt-4 flex gap-3">
+              {/* Botones */}
+              <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium"
+                  className="flex-1 py-4 text-gray-400 font-bold hover:bg-gray-50 rounded-2xl transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-md"
+                  className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2"
                 >
-                  Guardar Registro
+                  Confirmar Clase
                 </button>
               </div>
             </form>
