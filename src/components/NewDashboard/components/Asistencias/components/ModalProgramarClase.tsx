@@ -41,6 +41,7 @@ export const ModalProgramarClase = ({
     setAlumnoSeleccionado,
     horaSeleccionada,
     setHoraSeleccionada,
+    clearData,
   } = modalData;
 
   return (
@@ -52,7 +53,10 @@ export const ModalProgramarClase = ({
             <UserPlus className="text-emerald-500" /> Programar Clase
           </h3>
           <button
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              clearData();
+            }}
             className="p-2 hover:bg-white rounded-full transition-colors text-gray-400"
           >
             <X size={20} />
@@ -165,7 +169,10 @@ export const ModalProgramarClase = ({
           <div className="flex gap-3 pt-4">
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                clearData();
+              }}
               className="flex-1 py-4 text-gray-400 font-bold hover:bg-gray-50 rounded-2xl transition-colors"
             >
               Cancelar

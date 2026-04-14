@@ -32,13 +32,23 @@ export const useModalProgramarClase = ({
     horaSeleccionada,
     setHoraSeleccionada,
     guardarHorario,
-  } = useAsistencias(onClose);
+  } = useAsistencias(() => {
+    onClose();
+    clearData();
+  });
 
   if (!isOpen) return null;
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     guardarHorario(selectedDay);
+  };
+
+  const clearData = () => {
+    setSearchTerm("");
+    setAlumnoSeleccionado(null);
+    setHoraSeleccionada("");
+    setShowDropdown(false);
   };
 
   return {
@@ -53,5 +63,6 @@ export const useModalProgramarClase = ({
     horaSeleccionada,
     setHoraSeleccionada,
     handleFormSubmit,
+    clearData,
   };
 };

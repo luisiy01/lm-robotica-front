@@ -2,7 +2,15 @@ import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { CalendarDays, Users, UserPlus, User, Trash2 } from "lucide-react";
+import {
+  CalendarDays,
+  Users,
+  UserPlus,
+  User,
+  Trash2,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
 import "react-day-picker/dist/style.css";
 import { useAsistencias } from "./hooks/useAsistencias";
 import { ModalProgramarClase } from "./components/ModalProgramarClase";
@@ -14,11 +22,35 @@ export function Asistencias() {
 
   const { useAsistenciasDelDia, eliminarAsistencia } = useAsistencias();
 
-  const { data: asistencias = [], isLoading } =
-    useAsistenciasDelDia(selectedDay);
+  const {
+    data: asistencias = [],
+    isLoading,
+    isError,
+  } = useAsistenciasDelDia(selectedDay);
+
+  if (isLoading)
+    return (
+      <div className="flex h-96 items-center justify-center flex-col gap-4">
+        <Loader2 className="animate-spin text-emerald-500" size={48} />
+        <p className="text-gray-500 font-medium">
+          Sincronizando asistencias...
+        </p>
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="p-10 text-center bg-red-50 rounded-3xl border border-red-100 m-6">
+        <AlertCircle className="mx-auto text-red-500 mb-4" size={40} />
+        <h3 className="text-red-800 font-bold">Error de conexión</h3>
+        <p className="text-red-600">
+          No pudimos obtener la lista de asistencias de la base de datos.
+        </p>
+      </div>
+    );
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 relative">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 animate-fade-up  relative">
       {/* Encabezado con Botón de Acción */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
         <div className="flex items-center gap-3">

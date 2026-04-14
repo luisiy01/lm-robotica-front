@@ -8,6 +8,7 @@ import {
   Calendar,
   FileText,
   TableIcon,
+  AlertCircle,
 } from "lucide-react";
 import { usePagosQueries } from "./hooks/usePagosQueries";
 import { usePagos } from "./hooks/usePagos"; // Importamos el nuevo hook
@@ -17,7 +18,7 @@ import "./Pagos.css";
 
 export const Pagos = () => {
   const { pagosQuery } = usePagosQueries();
-  const { data: pagos, isLoading } = pagosQuery;
+  const { data: pagos, isLoading, isError } = pagosQuery;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Extraemos la lógica procesada del custom hook
@@ -38,8 +39,18 @@ export const Pagos = () => {
       </div>
     );
 
+  if (isError)
+    return (
+      <div className="p-10 text-center bg-red-50 rounded-3xl border border-red-100 m-6">
+        <AlertCircle className="mx-auto text-red-500 mb-4" size={40} />
+        <h3 className="text-red-800 font-bold">Error de conexión</h3>
+        <p className="text-red-600">
+          No pudimos obtener la lista de pagos de la base de datos.
+        </p>
+      </div>
+    );
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 relative">
+    <div className="p-6 max-w-7xl mx-auto space-y-6 animate-fade-up relative">
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
