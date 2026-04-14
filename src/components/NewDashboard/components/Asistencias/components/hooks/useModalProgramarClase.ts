@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useAsistencias } from "../../hooks/useAsistencias";
 import { useNuevoPago } from "../../../Pagos/hooks/useNuevoPago";
 import { useAlumnosQueries } from "../../../Alumnos/hooks/queries/useAlumnosQueries";
@@ -32,13 +32,23 @@ export const useModalProgramarClase = ({
     horaSeleccionada,
     setHoraSeleccionada,
     guardarHorario,
-  } = useAsistencias(onClose);
+  } = useAsistencias(() => {
+    onClose();
+    clearData();
+  });
 
   if (!isOpen) return null;
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     guardarHorario(selectedDay);
+  };
+
+  const clearData = () => {
+    setSearchTerm("");
+    setAlumnoSeleccionado(null);
+    setHoraSeleccionada("");
+    setShowDropdown(false);
   };
 
   return {
@@ -53,5 +63,6 @@ export const useModalProgramarClase = ({
     horaSeleccionada,
     setHoraSeleccionada,
     handleFormSubmit,
+    clearData,
   };
 };
