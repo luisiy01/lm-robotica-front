@@ -19,7 +19,7 @@ export const useAuthMutation = () => {
       });
 
       // 3. Redirigir al Dashboard
-      setTimeout(() => navigate("/dashboard/alumnos"), 1000);
+      setTimeout(() => navigate("/dashboard/alumnos", { replace: true }), 1000);
     },
     onError: (error: any) => {
       const mensaje = error.response?.data?.message || "Error al conectar";
