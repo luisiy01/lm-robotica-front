@@ -12,7 +12,7 @@ export function PaginaEnConstruccion() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 relative animate-fade-up overflow-hidden">
       {/* --- Legos flotando de fondo --- */}
       {legoBricks.map((brick, index) => (
         <div
