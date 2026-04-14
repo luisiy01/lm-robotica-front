@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useAsistencias } from "../../hooks/useAsistencias";
 import { useNuevoPago } from "../../../Pagos/hooks/useNuevoPago";
 import { useAlumnosQueries } from "../../../Alumnos/hooks/queries/useAlumnosQueries";
